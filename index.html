@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vet Dashboard Calculators</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 p-4 md:p-6 font-sans text-slate-800 min-h-screen">
+    
+    <!-- Main Dashboard Container: 3 Columns Grid -->
+    <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+
+        <!-- ========================================== -->
+        <!-- COLUMN 1: VET DRUG CALCULATOR (LEFT)       -->
+        <!-- ========================================== -->
+        <div class="w-full bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+            <!-- Header -->
+            <div class="bg-blue-600 p-4 text-center">
+                <h1 class="text-lg md:text-xl font-bold text-white flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="4" r="2"/></svg>
+                    Vet Drug Calculator
+                </h1>
+            </div>
+
+            <div class="p-5">
+                <!-- Inputs Form -->
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">น้ำหนัก (kg)</label>
+                            <input type="number" id="weight" step="0.1" placeholder="เช่น 2.28" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">ชนิดสัตว์</label>
+                            <select id="species" onchange="updateDoseUI()" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border outline-none transition bg-white">
+                                <option value="dog">🐶 สุนัข (Dog)</option>
+                                <option value="cat" selected>🐱 แมว (Cat)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">เลือกตัวยา (Formula)</label>
+                        <select id="drugSelect" onchange="updateDoseUI()" class="w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border outline-none transition bg-white mb-3">
+                            <optgroup label="NSAIDs / Pain Relief">
+                                <option value="carprofen">Carprofen (Rimadyl)</option>
+                                <option value="dipyrone">Dipyrone (Novacilan)</option>
+                                <option value="gabapentin">Gabapentin</option>
+                                <option value="meloxicam">Meloxicam (Metacam)</option>
+                                <option value="robenacoxib">Robenacoxib (Onsior)</option>
+                                <option value="tolfedine">Tolfedine</option>
+                            </optgroup>
+                            <optgroup label="Neurology / Anesthesia">
+                                <option value="atropine">Atropine</option>
+                                <option value="diazepam">Diazepam (Sipam)</option>
+                                <option value="fentanyl">Fentanyl Patch</option>
+                                <option value="levetiracetam">Levetiracetam (Keppa)</option>
+                                <option value="morphine">Morphine</option>
+                                <option value="propofol">Propofol (Troypofol)</option>
+                            </optgroup>
+                            <optgroup label="Cardiovascular / Diuretics">
+                                <option value="amlodipine">Amlodipine (Amlopine)</option>
+                                <option value="clopidogrel">Clopidogrel (Apolets)</option>
+                                <option value="furosemide">Furosemide (Furosic)</option>
+                                <option value="pimobendan">Pimobendan (Cardisure)</option>
+                                <option value="prazosin">Prazosin</option>
+                            </optgroup>
+                            <optgroup label="Hemostatics">
+                                <option value="tranexamic_acid">Tranexamic acid (Tramic/Transic)</option>
+                                <option value="yunnan_baiyao">Yunnan Baiyao</option>
+                            </optgroup>
+                            <optgroup label="Steroids">
+                                <option value="dexamethasone">Dexamethasone</option>
+                                <option value="prednisolone">Prednisolone</option>
+                            </optgroup>
+                            <optgroup label="Antibiotics / Anti-infectives">
+                                <option value="amoxclav">Amoxicillin-Clavulanate</option>
+                                <option value="cephalexin">Cephalexin (Teplexin/Cemelax)</option>
+                                <option value="clindamycin">Clindamycin (Antirobe)</option>
+                                <option value="doxycycline">Doxycycline (Xanda)</option>
+                                <option value="enrofloxacin">Enrofloxacin</option>
+                                <option value="itraconazole">Itraconazole</option>
+                                <option value="marbofloxacin">Marbofloxacin</option>
+                                <option value="metronidazole">Metronidazole</option>
+                                <option value="pradofloxacin">Pradofloxacin (Veraflox)</option>
+                                <option value="sulfatri">Sulfa-Tri (Co-trimoxazole)</option>
+                            </optgroup>
+                            <optgroup label="Antivirals">
+                                <option value="famciclovir">Famciclovir (Floclovir)</option>
+                                <option value="molnupiravir">Molnupiravir (Monovir)</option>
+                            </optgroup>
+                            <optgroup label="Respiratory">
+                                <option value="bromhexine">Bromhexine</option>
+                                <option value="doxofylline">Doxofylline (Puroxan)</option>
+                            </optgroup>
+                            <optgroup label="Anti-histamines / Allergy">
+                                <option value="cetirizine">Cetirizine (Zytizine)</option>
+                                <option value="chlorpheniramine">Chlorpheniramine</option>
+                                <option value="hydroxyzine">Hydroxyzine (Unirax)</option>
+                            </optgroup>
+                            <optgroup label="GI Drugs">
+                                <option value="cisapride">Cisapride</option>
+                                <option value="maropitant">Maropitant (Prevomax)</option>
+                                <option value="metoclopramide">Metoclopramide (Manosil)</option>
+                                <option value="omeprazole">Omeprazole</option>
+                                <option value="ondansetron">Ondansetron</option>
+                                <option value="simethicone">Simethicone</option>
+                                <option value="sucralfate">Sucralfate (Ulcefate)</option>
+                            </optgroup>
+                            <optgroup label="Immune Modulators / Biologics">
+                                <option value="filgrastim">Filgrastim (Leuco-Plus)</option>
+                                <option value="infervac">Infervac</option>
+                                <option value="virbagen">Virbagen Omega</option>
+                            </optgroup>
+                            <optgroup label="Supplement / Miscellaneous">
+                                <option value="antinol">Antinol</option>
+                                <option value="cystaid">Cystaid</option>
+                                <option value="ferro_b">Ferro-B</option>
+                                <option value="florgut">Florgut</option>
+                                <option value="glucose">Glucose 50%</option>
+                                <option value="hepaphos">Hepaphos</option>
+                                <option value="ipakitine">Ipakitine</option>
+                                <option value="katimun">Katimun</option>
+                                <option value="livo_b">Livo-B</option>
+                                <option value="methovet">Methovet (DL-methionine)</option>
+                                <option value="prabenguard">Prabenguard</option>
+                                <option value="renavast">RenAvast</option>
+                                <option value="same">SAMe (100 mg)</option>
+                                <option value="samylin">Samylin</option>
+                                <option value="vfls">VF-LS</option>
+                            </optgroup>
+                        </select>
+
+                        <label id="doseLabel" class="block text-sm font-semibold text-slate-700 mb-1">Dose ที่ต้องการใช้ (mg/kg)</label>
+                        <input type="number" id="customDose" step="0.05" class="w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border outline-none transition font-semibold text-blue-700">
+                        <p id="doseHint" class="text-xs text-blue-600 mt-2 font-medium flex items-center gap-1"></p>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="error-msg" class="hidden text-red-700 text-sm font-medium p-3 bg-red-100 border border-red-200 rounded-lg flex items-center gap-2">
+                        <svg class="shrink-0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <span id="error-text"></span>
+                    </div>
+
+                    <button onclick="calculate()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                        คำนวณขนาดยา
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results" class="mt-6 space-y-4 hidden text-sm">
+                    <!-- Result blocks will be injected here -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- COLUMN 2: FLUID THERAPY CALCULATOR (MID)   -->
+        <!-- ========================================== -->
+        <div class="w-full bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+            <!-- Header -->
+            <div class="bg-teal-600 p-4 text-center">
+                <h1 class="text-lg md:text-xl font-bold text-white flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+                    Fluid Therapy Calculator
+                </h1>
+            </div>
+
+            <div class="p-5">
+                <!-- Inputs Form -->
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">น้ำหนัก (kg)</label>
+                            <input type="number" id="fluidWeight" step="0.1" placeholder="เช่น 5.0" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2.5 border outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">ชนิดสัตว์ / ขนาด</label>
+                            <select id="fluidSpecies" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2.5 border outline-none transition bg-white">
+                                <option value="60" selected>🐱/🐶 Cat/Small dog (&lt;10 kg; 60 mL/kg)</option>
+                                <option value="50">🐕 Medium dog (10-25 kg; 50 mL/kg)</option>
+                                <option value="40">🦮 Large dog (25+ kg; 40 mL/kg)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- NEW COMORBID SECTION -->
+                    <div class="bg-rose-50 p-3 rounded-lg border border-rose-200 space-y-3">
+                        <div class="flex items-start gap-2">
+                            <input type="checkbox" id="fluidComorbidGlobal" class="mt-0.5 w-4 h-4 text-rose-600 border-gray-300 rounded focus:ring-rose-500 cursor-pointer" onchange="toggleComorbidState()">
+                            <label for="fluidComorbidGlobal" class="text-sm font-bold text-rose-700 cursor-pointer leading-tight">
+                                มีภาวะโรคหัวใจ หรือ โรคไต (Heart/Renal Disease)<br>
+                                <span class="text-[11px] font-normal text-rose-500">*ระบบจะให้ระบุเรท Maintenance เอง และลด Shock Dose 50%</span>
+                            </label>
+                        </div>
+                        <div id="comorbidRateContainer" class="hidden border-t border-rose-200 pt-3">
+                            <label class="block text-sm font-semibold text-rose-800 mb-1">Maintenance Rate (mL/kg/hr)</label>
+                            <input type="number" id="fluidCustomRate" step="0.1" value="1.5" class="w-full rounded-md border-rose-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 p-2 border outline-none transition font-semibold text-rose-700">
+                            <p class="text-[10px] text-rose-600 mt-1">แนะนำ 1-2 mL/kg/hr เป็นจุดเริ่มต้น (ปรับต่ำกว่า 1 ได้ตามความเหมาะสม)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-100 space-y-3">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">ภาวะแห้งน้ำ / Dehydration (%)</label>
+                            <input type="number" id="fluidDehydration" step="1" placeholder="เช่น 5" class="w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2.5 border outline-none transition font-semibold text-teal-700">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Ongoing losses (mL/day)</label>
+                            <input type="number" id="fluidOngoing" step="10" placeholder="เช่น อ้วก/ท้องเสีย (0 ถ้าไม่มี)" class="w-full rounded-md border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2.5 border outline-none transition text-teal-700">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">ชนิดชุดให้สารน้ำ (Drop factor)</label>
+                        <select id="fluidDropSet" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2.5 border outline-none transition bg-white">
+                            <option value="15">15 drops / mL (Macro - สุนัขใหญ่)</option>
+                            <option value="20" selected>20 drops / mL (Macro - ทั่วไป)</option>
+                            <option value="60">60 drops / mL (Micro - แมว/สัตว์เล็ก)</option>
+                        </select>
+                    </div>
+
+                    <!-- Shock Dose Section -->
+                    <div class="bg-rose-50 p-4 rounded-lg border border-rose-200 mt-2">
+                        <div class="flex items-center gap-2 mb-2">
+                            <svg class="text-rose-600" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            <label class="block text-sm font-bold text-rose-800">Shock Dose (Fluid Resuscitation)</label>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-rose-700 mb-1">ชนิดสัตว์ (สำหรับประเมิน Shock Dose)</label>
+                                <select id="fluidShockSpecies" class="w-full rounded-md border-rose-200 shadow-sm focus:border-rose-500 focus:ring-rose-500 p-2 border outline-none transition bg-white text-sm">
+                                    <option value="dog">🐶 สุนัข (15-20 mL/kg)</option>
+                                    <option value="cat">🐱 แมว (5-10 mL/kg)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="fluid-error-msg" class="hidden text-red-700 text-sm font-medium p-3 bg-red-100 border border-red-200 rounded-lg flex items-center gap-2">
+                        <svg class="shrink-0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <span id="fluid-error-text"></span>
+                    </div>
+
+                    <button onclick="calculateFluid()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                        คำนวณปริมาณน้ำเกลือ
+                    </button>
+                </div>
+
+                <!-- Fluid Results Section -->
+                <div id="fluid-results" class="mt-6 space-y-4 hidden text-sm">
+                    <!-- Fluid Result blocks will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- COLUMN 3: PLACEHOLDER (RIGHT)              -->
+        <!-- ========================================== -->
+        <div class="w-full bg-slate-200/50 rounded-xl shadow-inner border-2 border-dashed border-slate-300 flex flex-col items-center justify-center min-h-[500px] p-6 text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-4 opacity-50"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <h2 class="font-bold text-lg text-slate-500 mb-1">Calculator ที่ 3</h2>
+            <p class="text-sm text-center">ช่องว่างสำหรับเพิ่มเครื่องมือคำนวณอื่นๆ ในอนาคต<br>(เช่น CRI Calculator ฯลฯ)</p>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS FOR CALCULATORS -->
+    <script>
+        /* ========================================================
+           VET DRUG CALCULATOR LOGIC
+        ======================================================== */
+        function getPracticalFraction(num) {
+            if (num < 0.0625) return { val: 0, text: "0" };
+            const whole = Math.floor(num);
+            const frac = num - whole;
+            const fractions = [
+                { val: 0, text: "" },
+                { val: 1/8, text: "1/8" },
+                { val: 1/6, text: "1/6" },
+                { val: 1/4, text: "1/4" },
+                { val: 1/3, text: "1/3" },
+                { val: 1/2, text: "1/2" },
+                { val: 2/3, text: "2/3" },
+                { val: 1, text: "1" }
+            ];
+            let closest = fractions[0];
+            let minScore = Infinity;
+            for (let f of fractions) {
+                let diff = Math.abs(frac - f.val);
+                let penalty = (f.text.includes("3") || f.text.includes("6")) ? 1.5 : 1.0;
+                let score = diff * penalty;
+                if (score < minScore) { minScore = score; closest = f; }
+            }
+            let finalWhole = whole;
+            let finalFracText = closest.text;
+            let finalVal = whole + closest.val;
+            if (closest.val === 1) { finalWhole += 1; finalFracText = ""; }
+
+            let text = "";
+            if (finalWhole > 0 && finalFracText) text = finalWhole + " และ " + finalFracText;
+            else if (finalWhole > 0) text = finalWhole.toString();
+            else if (finalFracText) text = finalFracText;
+            else text = "0";
+
+            return { val: finalVal, text: text };
+        }
+
+        function updateDoseUI() {
+            const species = document.getElementById('species').value;
+            const drug = document.getElementById('drugSelect').value;
+            const doseInput = document.getElementById('customDose');
+            const hint = document.getElementById('doseHint');
+            const doseLabel = document.getElementById('doseLabel');
+
+            let hintSvg = `<svg class="shrink-0" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+            let unit = "mg/kg";
+            let defaultDose = 1;
+            let hintText = "";
+            let isStepBased = ['prabenguard', 'ferro_b', 'same', 'samylin', 'livo_b', 'hepaphos', 'renavast', 'cystaid', 'ipakitine', 'methovet', 'katimun', 'vfls', 'florgut', 'infervac', 'antinol'].includes(drug);
+
+            if (isStepBased) {
+                switch(drug) {
+                    case 'prabenguard': hintText = "สุนัข 1 tab/10kg, แมว 1 tab/4kg (ทุก 3-6 เดือน)"; break;
+                    case 'ferro_b': hintText = "1 tab/5-15 kg, 2 tab/15-30 kg"; break;
+                    case 'same': hintText = "<5kg: 1 tab, 5-10kg: 2 tab, 10-15kg: 3 tab (ac 1 hr)"; break;
+                    case 'samylin': hintText = "เลือกสูตรอัตโนมัติตามน้ำหนัก (ac 1 hr)"; break;
+                    case 'livo_b': hintText = "<5kg: 0.5 tab, 5-10kg: 1 tab, 10-20kg: 1.5 tab, >20kg: 2 tab"; break;
+                    case 'hepaphos': hintText = "<5kg: 0.5 tab, 5-10kg: 1 tab, 10-20kg: 1.5 tab, >20kg: 2 tab (ac 1 hr)"; break;
+                    case 'renavast': hintText = "แมว >1yr (<4.5kg: 1 tab, 4.5-9kg: 2 tab)"; break;
+                    case 'cystaid': hintText = "1 tab/ตัว BID (สัปดาห์ 1-4) จากนั้น SID"; break;
+                    case 'ipakitine': hintText = "1 g / 5 kg BID (ไม่เกิน 28 วัน)"; break;
+                    case 'methovet': hintText = "<4kg: 1 tab, >=4kg: 2 tab (BID)"; break;
+                    case 'katimun': hintText = "1 tab / 5 kg (SID)"; break;
+                    case 'vfls': hintText = "1 ซอง / 5 kg (SID)"; break;
+                    case 'florgut': hintText = "Small: ตัดที่ 5kg / Large: ตัดที่ 10kg"; break;
+                    case 'infervac': hintText = "1 mL ต่อ <10 kg (SC, IM q48h)"; break;
+                    case 'antinol': hintText = "สำหรับสัตว์ >6 เดือน (อ่านวิธีใช้ข้างกล่อง)"; break;
+                }
+                doseInput.value = '';
+                doseInput.disabled = true;
+                doseInput.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
+                doseInput.classList.remove('text-blue-700');
+                doseLabel.innerText = "วิธีคำนวณ (อัตโนมัติจากน้ำหนัก)";
+            } else {
+                switch(drug) {
+                    case 'tolfedine': defaultDose = 4; hintText = "Dose มาตรฐาน 4 mg/kg"; break;
+                    case 'robenacoxib': defaultDose = 2; hintText = "PO: 1-2 mg/kg, SC: 2 mg/kg"; break;
+                    case 'meloxicam':
+                        if(species === 'cat') { defaultDose = 0.3; hintText = "แมว: 0.3 mg/kg SC (ครั้งเดียว)"; }
+                        else { defaultDose = 0.2; hintText = "สุนัข: Loading 0.2 mg/kg ตามด้วย 0.1 mg/kg"; }
+                        break;
+                    case 'carprofen': defaultDose = 2.2; hintText = "สุนัข: 2.2 mg/kg BID หรือ 4.4 mg/kg SID"; break;
+                    case 'gabapentin': defaultDose = 10; hintText = "ช่วงแนะนำ 5-10 mg/kg"; break;
+                    case 'prednisolone':
+                        if (species === 'cat') { defaultDose = 1; hintText = "แมว: 1.0-2.0 mg/kg"; }
+                        else { defaultDose = 0.5; hintText = "สุนัข: 0.5-1.0 mg/kg"; }
+                        break;
+                    case 'dexamethasone': defaultDose = 0.1; hintText = "0.07-0.16 mg/kg (PO สุนัข 0.25-1.25, แมว 0.125-0.5 mg/ตัว)"; break;
+                    case 'dipyrone': defaultDose = 25; hintText = "25 mg/kg IV SID (จากนั้น 12.5 mg/kg BID)"; break;
+                    case 'atropine': defaultDose = 0.04; hintText = "0.04 mg/kg IM หรือ 0.01 mg/kg IV"; break;
+                    case 'glucose': defaultDose = 0.5; unit = "mL/kg"; hintText = "0.5-1 mL/kg (เจือจางก่อนให้ IV)"; break;
+                    case 'bromhexine': defaultDose = 2; hintText = "2 mg/kg PO BID (7-10 วัน) จากนั้นลดเหลือ 1 mg/kg"; break;
+                    case 'tranexamic_acid': defaultDose = 10; hintText = "10 mg/kg PO, slow IV (QID-TID)"; break;
+                    case 'yunnan_baiyao': defaultDose = 27; hintText = "27-55 mg/kg PO (TID-BID)"; break;
+                    case 'amlodipine':
+                        if (species === 'cat') { defaultDose = 0.625; unit = "mg/ตัว"; hintText = "แมว: 0.625-1.25 mg/ตัว"; }
+                        else { defaultDose = 0.1; hintText = "สุนัข: 0.1-0.25 mg/kg"; }
+                        break;
+                    case 'clindamycin':
+                        if (species === 'cat') { defaultDose = 11; hintText = "แมว: 11-33 mg/kg PO SID (Max 14 วัน)"; }
+                        else { defaultDose = 5.5; hintText = "สุนัข: 5.5-33 mg/kg PO BID (Max 28 วัน)"; }
+                        break;
+                    case 'clopidogrel':
+                        if (species === 'cat') { defaultDose = 18.75; unit = "mg/ตัว"; hintText = "แมว: 18.75 mg/ตัว"; }
+                        else { defaultDose = 1; hintText = "สุนัข: Maintenance 1-4 mg/kg (Loading 4-10)"; }
+                        break;
+                    case 'molnupiravir': defaultDose = 12; hintText = "แมว FIP: 12-15 mg/kg PO BID (Severe 20 mg/kg)"; break;
+                    case 'famciclovir': defaultDose = 90; hintText = "แมว FHV-1: 90 mg/kg PO BID"; break;
+                    case 'pimobendan': defaultDose = 0.25; hintText = "สุนัข MMVDB2: 0.25-0.3 mg/kg PO BID ac 1 hr"; break;
+                    case 'levetiracetam': defaultDose = 20; hintText = "20-30 mg/kg PO TID (เพิ่มได้ถึง 60)"; break;
+                    case 'diazepam': defaultDose = 0.5; hintText = "0.5-1 mg/kg IV หรือ 0.5-2 mg/kg Rectal"; break;
+                    case 'furosemide': defaultDose = 2; hintText = "2-4 mg/kg IM/IV หรือ 1-2 mg/kg PO BID"; break;
+                    case 'enrofloxacin':
+                        if (species === 'cat') { defaultDose = 5; hintText = "แมว: ล็อก Dose ไว้ที่ 5 mg/kg (ห้ามเกิน)"; }
+                        else { defaultDose = 5; hintText = "สุนัข: ช่วงแนะนำ 5-20 mg/kg"; }
+                        break;
+                    case 'marbofloxacin': defaultDose = 2.75; hintText = "ช่วงแนะนำ 2.75-5.5 mg/kg"; break;
+                    case 'pradofloxacin':
+                        if (species === 'cat') { defaultDose = 7.5; hintText = "แมว: 7.5 mg/kg PO SID"; }
+                        else { defaultDose = 3; hintText = "สุนัข: 3-4.5 mg/kg PO SID"; }
+                        break;
+                    case 'cephalexin': defaultDose = 15; hintText = "15-30 mg/kg PO BID"; break;
+                    case 'doxycycline': defaultDose = 10; hintText = "10 mg/kg (SID) หรือ 5 mg/kg (BID) w/m"; break;
+                    case 'amoxclav': defaultDose = 20; hintText = "ช่วงแนะนำ 12.5-25 mg/kg"; break;
+                    case 'sulfatri': defaultDose = 15; hintText = "15-30 mg/kg PO BID"; break;
+                    case 'metronidazole': defaultDose = 10; hintText = "Anaerobic 10-15 mg/kg, Giardia 25 mg/kg"; break;
+                    case 'itraconazole': defaultDose = 5; hintText = "5 mg/kg PO SID w/m 21 วัน"; break;
+                    case 'doxofylline':
+                        if (species === 'cat') { defaultDose = 5; hintText = "แมว: 5-10 mg/kg PO SID-BID"; }
+                        else { defaultDose = 15; hintText = "สุนัข: 15-20 mg/kg (then 20-40) PO BID"; }
+                        break;
+                    case 'hydroxyzine':
+                        if (species === 'cat') { defaultDose = 5; unit = "mg/ตัว"; hintText = "แมว: 5-10 mg/ตัว"; }
+                        else { defaultDose = 2; hintText = "สุนัข: 2 mg/kg"; }
+                        break;
+                    case 'cetirizine':
+                        if (species === 'cat') { defaultDose = 5; unit = "mg/ตัว"; hintText = "แมว: 5 mg/ตัว"; }
+                        else { defaultDose = 1; hintText = "สุนัข: 1-4 mg/kg (หรือ 10-20 mg/ตัว)"; }
+                        break;
+                    case 'chlorpheniramine':
+                        if (species === 'cat') { defaultDose = 2; unit = "mg/ตัว"; hintText = "แมว: 2-4 mg/ตัว"; }
+                        else { defaultDose = 0.2; hintText = "สุนัข: 0.2-0.5 mg/kg"; }
+                        break;
+                    case 'maropitant': defaultDose = 1; hintText = "1 mg/kg SC (Max 5 days)"; break;
+                    case 'ondansetron': defaultDose = 0.5; hintText = "0.5-1.0 mg/kg SC, IV"; break;
+                    case 'metoclopramide': defaultDose = 0.2; hintText = "0.2-0.5 mg/kg SC, PO"; break;
+                    case 'cisapride':
+                        if (species === 'cat') { defaultDose = 2.5; unit = "mg/ตัว"; hintText = "แมว: 2.5 mg/ตัว"; }
+                        else { defaultDose = 0.1; hintText = "สุนัข: 0.1-0.5 mg/kg"; }
+                        break;
+                    case 'omeprazole': defaultDose = 1; hintText = "1 mg/kg PO, IV ac (1 hr)"; break;
+                    case 'sucralfate': defaultDose = 0.25; unit = "g/ตัว"; hintText = "0.25-1.0 g/ตัว ac (1 hr)"; break;
+                    case 'simethicone': defaultDose = 20; unit = "mg/ตัว"; hintText = "20-200 mg/ตัว PO QID-SID"; break;
+                    case 'morphine': defaultDose = 0.1; hintText = "0.1-0.3 mg/kg SC, IM, IV (ทุก 2-4 ชม.)"; break;
+                    case 'fentanyl': defaultDose = 2; unit = "mcg/kg/hr"; hintText = "เริ่มที่ 2 mcg/kg/hr"; break;
+                    case 'propofol': 
+                        if (species === 'cat') { defaultDose = 1.1; hintText = "แมว: 1.1-3.3 mg/kg (10-60 sec)"; }
+                        else { defaultDose = 5.5; hintText = "สุนัข: 5.5-7 mg/kg (40-90 sec)"; }
+                        break;
+                    case 'filgrastim': defaultDose = 5; unit = "mcg/kg"; hintText = "5-10 mcg/kg SC SID (3-5 วัน)"; break;
+                    case 'virbagen': defaultDose = 2.5; unit = "MU/kg"; hintText = "CPV/FCV/FPV=2.5, CDV=2.0, FIV/FeLV=1.0 MU/kg"; break;
+                    case 'prazosin':
+                        unit = "mg/ตัว";
+                        if (species === 'cat') { defaultDose = 0.5; hintText = "แมว: 0.25-1 mg/ตัว"; }
+                        else { defaultDose = 1; hintText = "สุนัข: 0.5-3 mg/ตัว"; }
+                        break;
+                }
+                doseInput.value = defaultDose;
+                doseInput.disabled = false;
+                doseInput.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
+                doseInput.classList.add('text-blue-700');
+                doseLabel.innerText = `Dose ที่ต้องการใช้ (${unit})`;
+            }
+            hint.innerHTML = hintSvg + " " + hintText;
+        }
+
+        function showError(msg) {
+            const errDiv = document.getElementById('error-msg');
+            document.getElementById('error-text').textContent = msg;
+            errDiv.classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            let sbox = document.getElementById('summaryBox');
+            if (sbox) sbox.classList.add('hidden');
+        }
+
+        function hideError() { document.getElementById('error-msg').classList.add('hidden'); }
+
+        function updateSummary() {
+            let summaryLines = [];
+            const checkboxes = document.querySelectorAll('.rx-checkbox:checked');
+            
+            checkboxes.forEach(cb => {
+                let data = window.summaryData[cb.value];
+                let line = `- ${data.summaryName} = ${data.amount} ${data.unit}`;
+                
+                let instructions = [];
+                if (data.route) instructions.push(data.route);
+                if (data.freq) instructions.push(data.freq);
+                
+                if (instructions.length > 0) line += `, ${instructions.join(', ')}`;
+                if (data.actualDose) line += ` (Dose = ${data.actualDose})`;
+                summaryLines.push(line);
+            });
+            
+            const summaryBox = document.getElementById('summaryBox');
+            const summaryText = document.getElementById('summaryText');
+            
+            if (summaryLines.length > 0) {
+                summaryBox.classList.remove('hidden');
+                summaryText.value = summaryLines.join('\n');
+                summaryText.style.height = 'auto';
+                summaryText.style.height = (summaryText.scrollHeight + 10) + 'px';
+            } else {
+                summaryBox.classList.add('hidden');
+                summaryText.value = '';
+            }
+        }
+
+        function copySummary(event) {
+            const text = document.getElementById('summaryText');
+            text.select();
+            document.execCommand('copy');
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = 'คัดลอกแล้ว!';
+            setTimeout(() => { btn.innerText = originalText; }, 2000);
+        }
+
+        function calculate() {
+            hideError();
+            window.summaryData = []; 
+            
+            const w = parseFloat(document.getElementById('weight').value);
+            const species = document.getElementById('species').value;
+            const drug = document.getElementById('drugSelect').value;
+            const doseInput = document.getElementById('customDose');
+            const dose = parseFloat(doseInput.value);
+            const baseDrugName = document.getElementById('drugSelect').options[document.getElementById('drugSelect').selectedIndex].text.split(' ')[0];
+
+            let isStepBased = ['prabenguard', 'ferro_b', 'same', 'samylin', 'livo_b', 'hepaphos', 'renavast', 'cystaid', 'ipakitine', 'methovet', 'katimun', 'vfls', 'florgut', 'infervac', 'antinol'].includes(drug);
+
+            if (isNaN(w) || w <= 0) return showError("กรุณาระบุน้ำหนักสัตว์ให้ถูกต้อง (ตัวเลขมากกว่า 0 kg)");
+            if (!isStepBased && (isNaN(dose) || dose <= 0)) return showError("กรุณาระบุ Dose ยาให้ถูกต้อง");
+
+            let displayDose = '';
+            let displayTotal = '';
+            let totalAmount = 0;
+            let unitType = 'mg_kg';
+
+            if (isStepBased) {
+                displayDose = "Step-based Dose";
+                displayTotal = "คำนวณจากน้ำหนักอัตโนมัติ";
+                if (drug === 'ipakitine') { displayDose = "1 g / 5 kg"; displayTotal = `${(w/5).toFixed(2)} g`; }
+                else if (drug === 'katimun') { displayDose = "1 tab / 5 kg"; displayTotal = `${(w/5).toFixed(2)} tab`; }
+                else if (drug === 'vfls') { displayDose = "1 ซอง / 5 kg"; displayTotal = `${(w/5).toFixed(2)} ซอง`; }
+                else if (drug === 'infervac') { displayDose = "1 mL ต่อ <10 kg"; displayTotal = `${Math.ceil(w/10).toFixed(2)} mL`; }
+                else if (drug === 'antinol') { displayDose = "อ่านข้างกล่อง"; displayTotal = "กำหนดเอง"; }
+            } else {
+                if (drug === 'sucralfate') unitType = 'g_animal';
+                else if (drug === 'prazosin' || drug === 'simethicone') unitType = 'mg_animal';
+                else if (species === 'cat' && ['hydroxyzine', 'cetirizine', 'chlorpheniramine', 'cisapride', 'amlodipine', 'clopidogrel'].includes(drug)) unitType = 'mg_animal';
+                else if (drug === 'fentanyl') unitType = 'mcg_kg_hr';
+                else if (drug === 'filgrastim') unitType = 'mcg_kg';
+                else if (drug === 'virbagen') unitType = 'mu_kg';
+                else if (drug === 'glucose') unitType = 'ml_kg';
+
+                totalAmount = (unitType === 'mg_kg') ? (w * dose) : dose;
+                if (['fentanyl', 'filgrastim', 'virbagen', 'glucose'].includes(drug)) totalAmount = w * dose;
+
+                if (unitType === 'g_animal') displayDose = `${dose} g/ตัว`;
+                else if (unitType === 'mg_animal') displayDose = `${dose} mg/ตัว`;
+                else if (unitType === 'mcg_kg_hr') displayDose = `${dose} mcg/kg/hr`;
+                else if (unitType === 'mcg_kg') displayDose = `${dose} mcg/kg`;
+                else if (unitType === 'mu_kg') displayDose = `${dose} MU/kg`;
+                else if (unitType === 'ml_kg') displayDose = `${dose} mL/kg`;
+                else displayDose = `${dose} mg/kg`;
+
+                if (unitType === 'g_animal') displayTotal = `${totalAmount.toFixed(2)} g`;
+                else if (['mcg_kg_hr', 'mcg_kg'].includes(unitType)) displayTotal = `${totalAmount.toFixed(2)} mcg`;
+                else if (unitType === 'mu_kg') displayTotal = `${totalAmount.toFixed(2)} MU`;
+                else if (unitType === 'ml_kg') displayTotal = `${totalAmount.toFixed(2)} mL`;
+                else displayTotal = `${totalAmount.toFixed(2)} mg`;
+            }
+
+            let html = `<h2 class="text-base font-bold text-slate-800 border-b-2 border-slate-100 pb-2 mb-4">ผลการคำนวณสำหรับ ${species === 'dog' ? '🐶 สุนัข' : '🐱 แมว'} (${w} kg)</h2>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-3 border-b border-slate-50 pb-2">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold text-slate-800 text-lg uppercase">${baseDrugName}</h3>
+                        <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Total: ${displayTotal}</span>
+                    </div>
+                    <span class="text-[11px] font-medium text-slate-500 border border-slate-200 px-2 py-1 rounded">Dose: ${displayDose}</span>
+                </div>
+                <div class="space-y-2 mt-3">`;
+
+            const addRow = (icon, displayName, displayAmount, displayUnit, freq, extra, summaryName, summaryAmount, summaryUnit, route, actualDose) => {
+                window.summaryData.push({ summaryName, amount: summaryAmount, unit: summaryUnit, route, freq, actualDose, extra });
+                let idx = window.summaryData.length - 1;
+                let checkboxHtml = summaryAmount ? `<div class="pt-0.5"><input type="checkbox" id="chk-${idx}" value="${idx}" class="rx-checkbox w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 cursor-pointer" onchange="updateSummary()"></div>` : `<div class="w-4 h-4 mr-3"></div>`;
+                return `<div class="flex items-start gap-3 bg-slate-50 p-2 rounded border border-transparent hover:border-slate-300 transition-colors">
+                    ${checkboxHtml}
+                    <label for="chk-${idx}" class="flex-1 cursor-pointer select-none">
+                        <div class="flex justify-between items-center"><span class="text-sm leading-tight">${icon} ${displayName}</span><span class="font-bold text-blue-700 text-right shrink-0 ml-2">${displayAmount} ${displayUnit} <span class="text-xs text-slate-500 font-normal ml-1">${freq}</span></span></div>
+                        ${extra ? `<div class="text-xs text-indigo-500 text-right mt-1">${extra}</div>` : ''}
+                    </label></div>`;
+            };
+
+            const injRow = (name, vol, freq, extra = '') => {
+                let mgMatch = name.match(/\((\d+(?:\.\d+)?)[\s]*mg\/ml\)/i) || name.match(/\(50%\)/i);
+                let mgPerMl = mgMatch ? mgMatch[1] : null;
+                let summaryName = baseDrugName;
+                if (mgPerMl) summaryName += ` (${mgPerMl})`;
+                else if (name.includes('50%')) summaryName += ` (50%)`; 
+
+                let routeMatch = name.match(/\b(SC|IM|IV|PO)\b/i) || freq.match(/\b(SC|IM|IV|PO)\b/i);
+                let route = routeMatch ? routeMatch[1].toUpperCase() : 'SC/IM/IV'; 
+                if (/\bIV ONLY\b/i.test(name) || /\bIV ONLY\b/i.test(freq) || /\bIV\b/i.test(extra)) route = 'IV';
+                else if (/\bPO\b/i.test(name) || /\bPO\b/i.test(freq)) route = 'PO';
+                let actualDoseStr = `${dose} ${unitType.replace('_','/')}`;
+                return addRow('💉', name, vol.toFixed(2), 'mL', freq, extra, summaryName, vol.toFixed(2), 'mL', route, actualDoseStr);
+            };
+
+            const tabRowSafe = (name, mgPerTab, freq, extra = '') => {
+                let rawTabs = totalAmount / mgPerTab;
+                let prac = getPracticalFraction(rawTabs);
+                let tabs = prac.val;
+                if (tabs === 0) return `<div class="flex items-start gap-3 bg-slate-50 p-2 rounded opacity-50"><div class="w-4 h-4 mr-1"></div><div class="flex-1 flex justify-between"><span class="text-sm">💊 ${name}</span><span class="text-xs text-slate-500 font-bold">ขนาดยาน้อยเกินไป (< 1/16 เม็ด)</span></div></div>`;
+                
+                let actualGivenMg = tabs * mgPerTab;
+                let diffPercent = ((actualGivenMg - totalAmount) / totalAmount) * 100;
+                let actualMgKg = actualGivenMg / w;
+                let displayActual = (unitType === 'mg_kg') ? `${actualMgKg.toFixed(2)} mg/kg` : `${actualGivenMg.toFixed(2)} mg/ตัว`;
+                
+                if (drug === 'prazosin' || drug === 'simethicone' || (species === 'cat' && ['hydroxyzine', 'cetirizine', 'chlorpheniramine', 'cisapride', 'amlodipine', 'clopidogrel'].includes(drug))) displayActual = `${actualGivenMg.toFixed(2)} mg/ตัว`;
+                else if (unitType === 'g_animal') displayActual = `${(actualGivenMg/1000).toFixed(2)} g/ตัว`;
+
+                let doseCheckHtml = '';
+                if (diffPercent > 10) doseCheckHtml = `<br><span class="text-[10px] text-red-600 font-bold leading-none inline-block mt-1">⚠ ได้ยาเกินโดส (รับจริง ${displayActual})</span>`;
+                else if (diffPercent < -10) doseCheckHtml = `<br><span class="text-[10px] text-amber-600 font-bold leading-none inline-block mt-1">⚠ ได้ยาต่ำกว่าโดส (รับจริง ${displayActual})</span>`;
+                else doseCheckHtml = `<br><span class="text-[10px] text-teal-600 font-medium leading-none inline-block mt-1">✓ ปริมาณเหมาะสม (รับจริง ${displayActual})</span>`;
+
+                let summaryName = `${baseDrugName} (${mgPerTab})`;
+                let displayNameWithCheck = `${name}${doseCheckHtml}`;
+                return addRow('💊', displayNameWithCheck, prac.text, 'tab', freq, extra, summaryName, prac.text, 'tab', 'PO', displayActual);
+            };
+
+            const tabRowStandard = (name, rawTabs, freq, extra = '') => {
+                let prac = getPracticalFraction(rawTabs);
+                return addRow('💊', name, prac.text, 'tab', freq, extra, name, prac.text, 'tab', 'PO', '');
+            };
+
+            const cautionBlock = (msg, type='amber') => `<div class="mt-3 text-xs font-medium text-${type}-700 bg-${type}-50 p-2 rounded-md flex gap-2 border border-${type}-100"><svg class="shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${msg}</div>`;
+
+            // --- Regular Drugs Logic ---
+            if (drug === 'tolfedine') {
+                html += injRow('4% Injection (40 mg/ml)', totalAmount / 40, 'SID');
+                html += tabRowSafe('Tolfedine 60 mg', 60, 'SID');
+                html += tabRowSafe('Tolfedine 30 mg', 30, 'SID');
+                if (dose > 4) html += cautionBlock(`ใช้ Dose เกินมาตรฐาน (4 mg/kg)`, 'red');
+                html += cautionBlock(`ห้ามใช้เกิน Dose มาตรฐาน หลีกเลี่ยงในสัตว์ที่มีภาวะ Dehydration, โรคตับ หรือโรคไต`);
+                html += cautionBlock(`Caution: แนะนำสำหรับสัตว์อายุ >6 สัปดาห์`, 'red');
+            } 
+            else if (drug === 'robenacoxib') {
+                html += injRow('Onsior Inj (20 mg/ml) SC', totalAmount / 20, 'SID');
+                html += tabRowSafe('Onsior 6 mg', 6, 'SID');
+                html += tabRowSafe('Onsior 20 mg', 20, 'SID');
+                if (w < 2.5) html += cautionBlock(`น้ำหนักสัตว์ < 2.5 kg! Caution ในการใช้ยา`, 'red');
+                html += cautionBlock(`PO Maximum 3 วัน | สำหรับสัตว์อายุ >4 เดือน (น้ำหนัก >2.5 kg)`, 'red');
+            } 
+            else if (drug === 'meloxicam') {
+                html += injRow('Metacam (5 mg/ml) SC/IV', totalAmount / 5, '');
+                html += injRow('Metacam Oral (1.5 mg/ml) PO', totalAmount / 1.5, 'SID');
+                html += injRow('Metacam Oral (0.5 mg/ml) PO', totalAmount / 0.5, 'SID');
+                html += tabRowSafe('Melobic 7.5 mg', 7.5, 'SID');
+                html += cautionBlock(`แมว: แนะนำ 0.3 mg/kg SC ครั้งเดียว<br>สุนัข: แนะนำ Loading 0.2 mg/kg ตามด้วย 0.1 mg/kg ต่อไป`);
+                html += cautionBlock(`Caution: แนะนำสำหรับสัตว์อายุ >6 สัปดาห์ (แมว น้ำหนัก >2 kg สำหรับชนิดกิน)`, 'red');
+            }
+            else if (drug === 'carprofen') {
+                let freq = (dose === 2.2) ? 'BID' : (dose === 4.4 ? 'SID' : 'SID/BID');
+                html += injRow('Rimadyl Inj (50 mg/ml) SC only', totalAmount / 50, freq);
+                html += tabRowSafe('Rimadyl 25 mg', 25, freq);
+                html += tabRowSafe('Rimadyl 75 mg', 75, freq);
+                if (species === 'cat') html += cautionBlock(`Caution: NOT USED IN CATS!`, 'red');
+                html += cautionBlock(`Caution: แนะนำสำหรับสัตว์อายุ >4 เดือน`, 'red');
+            }
+            else if (drug === 'gabapentin') {
+                html += tabRowSafe('Gabapentin 100 mg', 100, 'BID');
+                html += tabRowSafe('Gabapentin 300 mg', 300, 'BID');
+                if (species === 'cat') html += cautionBlock(`Caution: 1-5 mg/kg is recommended for cats with CKD.`, 'red');
+            }
+            else if (drug === 'prednisolone') {
+                html += injRow('Prednisolone acetate (25 mg/ml) IM', totalAmount / 25, 'SID');
+                html += tabRowSafe('Prednisolone 5 mg', 5, 'SID');
+                html += cautionBlock(`Note: Required tapering dose if using >7 days`);
+            }
+            else if (drug === 'dexamethasone') {
+                html += injRow('Dexton-vet (3 mg/ml) SC/IV', totalAmount / 3, 'SID');
+                html += cautionBlock(`Anti-inflammatory dose. สำหรับยากินสุนัข 0.25-1.25 mg/ตัว | แมว 0.125-0.5 mg/ตัว (ไม่เกิน 7 วัน)`);
+            }
+            else if (drug === 'dipyrone') {
+                html += injRow('Novacilan inj (50% = 500 mg/ml) IV', totalAmount / 500, 'SID/BID');
+                html += cautionBlock(`25 mg/kg IV SID จากนั้น 12.5 mg/kg IV BID`);
+            }
+            else if (drug === 'itraconazole') {
+                html += tabRowSafe('Itraconazole 100 mg', 100, 'SID w/m *21 วัน');
+                html += cautionBlock(`Note: แนะนำให้กินต่อเนื่องอีก 1 สัปดาห์หลังจากอาการทางคลินิกหายไปแล้ว`);
+                html += cautionBlock(`Caution: สำหรับสัตว์อายุ >8 สัปดาห์ (ระวังในสัตว์ที่มีปัญหาโรคตับ)`, 'red');
+            }
+            else if (drug === 'cephalexin') {
+                html += tabRowSafe('Teplexin 250 mg', 250, 'BID');
+                html += tabRowSafe('Teplexin / Cemelax 500 mg', 500, 'BID');
+                html += cautionBlock(`Caution: สำหรับสัตว์อายุ >9 สัปดาห์ (น้ำหนัก >1 kg)`, 'red');
+            }
+            else if (drug === 'sulfatri') {
+                html += injRow('Spectrim susp. (48 mg/ml) PO', totalAmount / 48, 'BID');
+                html += tabRowSafe('Co-trimoxazole 480 mg', 480, 'BID');
+            }
+            else if (drug === 'metronidazole') {
+                html += injRow('Metronidazole infusion (5 mg/ml) IV', totalAmount / 5, 'SID *7 days');
+                html += injRow('Metrogyl susp. (40 mg/ml) PO', totalAmount / 40, 'SID *7 days');
+                html += tabRowSafe('Metronidazole 200 mg', 200, 'SID *7 days');
+                html += cautionBlock(`Note: Anerobic infection ใช้ 10-15 mg/kg (แมว 62.5 mg/ตัว), Giardia ใช้ 25 mg/kg`);
+                html += cautionBlock(`Caution: สำหรับสัตว์อายุ >6-8 สัปดาห์ (ระวังในสัตว์ที่มีปัญหาโรคตับ)`, 'red');
+            }
+            else if (drug === 'pradofloxacin') {
+                html += injRow('Veraflox syrup (25 mg/ml) PO', totalAmount / 25, 'SID');
+                html += tabRowSafe('Veraflox 60 mg', 60, 'SID');
+                html += cautionBlock(`Caution: แนะนำสำหรับสุนัขพันธุ์เล็ก/กลาง >8 เดือน, พันธุ์ใหญ่ >12 เดือน, พันธุ์ยักษ์ >18 เดือน และแมว >12 สัปดาห์`, 'red');
+            }
+            else if (drug === 'enrofloxacin') {
+                let actualEnroDose = (species === 'cat' && dose > 5) ? 5 : dose;
+                totalAmount = w * actualEnroDose; 
+                html += injRow('Baytril 5% Inj (50 mg/ml)', totalAmount / 50, 'SID');
+                html += injRow('Octacin-EN 1% (10 mg/ml) PO', totalAmount / 10, 'SID');
+                html += injRow('Enfloxcin 10% (100 mg/ml) PO', totalAmount / 100, 'SID');
+                html += tabRowSafe('Enroguard 15 mg', 15, 'SID');
+                html += tabRowSafe('Enrocin 50 mg', 50, 'SID');
+                if (species === 'cat' && dose > 5) html += cautionBlock(`ปรับ Dose เป็น 5 mg/kg อัตโนมัติ แมวห้ามใช้เกิน 5 mg/kg เด็ดขาด เสี่ยงต่อภาวะ Retinal degeneration`, 'red');
+                else if (species === 'cat') html += cautionBlock(`แมวห้ามใช้เกิน 5 mg/kg เด็ดขาด`);
+                else if (actualEnroDose > 20) html += cautionBlock(`สุนัขใช้เกิน Maximum Dose ที่แนะนำ (20 mg/kg)`, 'red');
+                html += cautionBlock(`Caution: แนะนำสำหรับสุนัขพันธุ์เล็ก/กลาง >8 เดือน, พันธุ์ใหญ่ >12 เดือน, พันธุ์ยักษ์ >18 เดือน และแมว >8 สัปดาห์`, 'red');
+            }
+            else if (drug === 'marbofloxacin') {
+                html += injRow('Marbocyl 2% Inj (20 mg/ml)', totalAmount / 20, 'SID');
+                html += tabRowSafe('Marboxa 20 mg', 20, 'SID');
+                html += tabRowSafe('Marboxa 80 mg', 80, 'SID');
+                if (dose < 2.75 || dose > 5.5) html += cautionBlock(`Dose นอกช่วงมาตรฐาน (2.75-5.5 mg/kg)`, 'red');
+                html += cautionBlock(`Caution: แนะนำสำหรับสุนัขพันธุ์เล็ก/กลาง >8 เดือน, พันธุ์ใหญ่ >12 เดือน, พันธุ์ยักษ์ >18 เดือน และแมว >12 เดือน`, 'red');
+            }
+            else if (drug === 'doxycycline') {
+                let freq = dose <= 5 ? 'BID' : 'SID';
+                html += tabRowSafe('Xanda 100 mg', 100, freq, 'w/m');
+                html += cautionBlock(`แนะนำให้ยาพร้อมมื้ออาหาร (w/m) หรือตามด้วยน้ำ เพื่อป้องกัน Esophageal stricture (กินติดต่อกัน 14-28 วัน)`);
+                html += cautionBlock(`Caution: แนะนำสำหรับสัตว์อายุ >6 เดือน (ป้องกันเคลือบฟันเปลี่ยนสีและยับยั้งการเจริญเติบโต)`, 'red');
+            }
+            else if (drug === 'amoxclav') {
+                html += injRow('Novaclav (175 mg/ml) SC/IM', totalAmount / 175, 'SID');
+                html += injRow('Amoxclav powder (60 mg/ml) IV', totalAmount / 60, '', '1.2g + 20 DW');
+                html += injRow('Amoxclav powder (120 mg/ml) IV', totalAmount / 120, '', '1.2g + 10 DW');
+                html += `<div class="text-[11px] font-bold text-slate-500 mt-3 mb-1 border-b border-slate-100 pl-8">Oral Suspension / Drop</div>`;
+                html += injRow('Amoxclamed drop (62.5 mg/ml) PO', totalAmount / 62.5, 'BID', '+14 mL DW');
+                html += `<div class="text-[11px] font-bold text-slate-500 mt-3 mb-1 border-b border-slate-100 pl-8">Tablet Formats</div>`;
+                html += tabRowSafe('Moxclavet 62.5 mg', 62.5, 'BID');
+                html += tabRowSafe('Moxclavet 125 mg', 125, 'BID');
+                html += tabRowSafe('Moxclavet 250 mg', 250, 'BID');
+                html += tabRowSafe('Koact 375 mg', 375, 'BID');
+                html += tabRowSafe('Moxclavet 500 mg', 500, 'BID');
+                html += tabRowSafe('Koact 625 mg', 625, 'BID');
+            }
+            else if (drug === 'doxofylline') {
+                html += injRow('Puroxan syrup 2% (20 mg/ml) PO', totalAmount / 20, 'SID-BID');
+                html += tabRowSafe('Puroxan 400 mg', 400, 'SID-BID');
+                if (species === 'cat' && dose > 10) html += cautionBlock(`แมวแนะนำให้ใช้ Dose ต่ำกว่าสุนัข (5-10 mg/kg)`, 'red');
+                html += cautionBlock(`Caution: ระวังในสัตว์ที่มีโรคหัวใจ/ตับ`, 'red');
+            }
+            else if (drug === 'hydroxyzine') {
+                html += tabRowSafe('Unirax 10 mg', 10, 'BID');
+                html += tabRowSafe('Unirax 25 mg', 25, 'BID');
+            }
+            else if (drug === 'cetirizine') {
+                html += tabRowSafe('Zytizine 10 mg', 10, 'SID');
+            }
+            else if (drug === 'chlorpheniramine') {
+                html += injRow('Chlorpheniramine maleate (10 mg/ml) SC/IM/IV', totalAmount / 10, 'BID');
+                html += injRow('CPM syrup (0.4 mg/ml) PO', totalAmount / 0.4, 'BID');
+                html += tabRowSafe('Chlorphen 4 mg', 4, 'BID');
+            }
+            else if (drug === 'maropitant') {
+                html += injRow('Prevomax (10 mg/ml) SC', totalAmount / 10, 'SID');
+                html += cautionBlock(`Maximum of 5 days | แนะนำสำหรับสุนัข >8 สัปดาห์ และ แมว >16 สัปดาห์`, 'red');
+            }
+            else if (drug === 'ondansetron') {
+                html += injRow('Ondansetron HCl Inj (2 mg/ml) SC/IV', totalAmount / 2, 'BID', '*ความเข้มข้นทั่วไป');
+                html += `<div class="text-[10px] text-slate-500 text-right mt-1">*หากความเข้มข้นอื่น ให้คำนวณจาก Total: ${totalAmount.toFixed(2)} mg</div>`;
+            }
+            else if (drug === 'metoclopramide') {
+                html += injRow('Manosil injection (5 mg/ml) IM/IV', totalAmount / 5, 'BID');
+                html += injRow('Manosil syrup (1 mg/ml) PO', totalAmount / 1, 'BID ac 30 min');
+                html += tabRowSafe('Manosil 10 mg', 10, 'BID ac 30 min');
+                if (species === 'cat') html += cautionBlock(`Note: Not effective in cats as anti-emetic. (ใช้เป็น pro-kinetic ได้)`);
+                html += cautionBlock(`Caution: ห้ามใช้หากสงสัยว่ามีสิ่งแปลกปลอมอุดตัน`, 'red');
+            }
+            else if (drug === 'cisapride') {
+                html += tabRowSafe('Cisapie 10 mg', 10, 'BID ac 30 min');
+                html += cautionBlock(`Caution: ระวังในสัตว์ที่มีปัญหาหัวใจ`, 'red');
+            }
+            else if (drug === 'omeprazole') {
+                html += injRow('OmePPI (4 mg/ml) IV', totalAmount / 4, 'BID ac 1 hr', '40mg + 10ml DW');
+                html += tabRowSafe('Omeprazole 20 mg', 20, 'BID ac 1 hr');
+                html += cautionBlock(`Caution: if >4 weeks consider taper dose by 50% each week (BID >> SID >> EOD >> Stop) to prevent RAHS`);
+            }
+            else if (drug === 'sucralfate') {
+                html += injRow('Ulcefate (0.2 g/ml) PO', totalAmount / 0.2, 'BID ac 1 hr');
+            }
+            else if (drug === 'simethicone') {
+                html += injRow('Simcomine syrup (10 mg/ml) PO', totalAmount / 10, 'QID-SID');
+                html += injRow('Simcone drops (67 mg/ml) PO', totalAmount / 67, 'QID-SID');
+            }
+            else if (drug === 'morphine') {
+                html += injRow('Morphine injection (10 mg/ml)', totalAmount / 10, 'ทุก 2-4 ชม.', 'SC, IM, IV');
+            }
+            else if (drug === 'fentanyl') {
+                html += addRow('🩹', 'Fentanyl Patch', totalAmount.toFixed(2), 'mcg/hr', '', '', 'Fentanyl Patch', totalAmount.toFixed(2), 'mcg/hr', 'Topical', `${dose} mcg/kg/hr`);
+                let patchSugg = (species === 'dog' && w < 5) || (species === 'cat' && w < 4) ? "12 mcg/hr" : "25 mcg/hr (หรือปรับตามเหมาะสม)";
+                html += cautionBlock(`Labeled dose สำหรับน้ำหนักนี้แนะนำ: <b>${patchSugg}</b><br>(Dog <5kg / Cat <4kg ใช้ 12 mcg/hr | Dog 5-10kg / Cat >4kg ใช้ 25 mcg/hr)`, 'blue');
+            }
+            else if (drug === 'propofol') {
+                html += injRow('Troypofol 1% (10 mg/ml) IV', totalAmount / 10, '');
+                html += cautionBlock(`Note: No others pre-anesthetic agents. สุนัขให้ที่ 40-90 sec, แมวให้ที่ 10-60 sec`, 'blue');
+            }
+            else if (drug === 'filgrastim') {
+                html += injRow('Leuco-Plus (300 mcg/ml) SC', totalAmount / 300, 'SID *3-5 days');
+                html += cautionBlock(`G-CSF >> stimulate neutrophils production`, 'blue');
+                html += cautionBlock(`Severe FIV, FeLV >> may not response due to exhausted BM`, 'red');
+            }
+            else if (drug === 'virbagen') {
+                html += injRow('Virbagen omega 5 MU/ml SC', totalAmount / 5, '');
+                html += injRow('Virbagen omega 10 MU/ml SC', totalAmount / 10, '');
+                html += cautionBlock(`CPV: 2.5 MU/kg/day *3วัน<br>FCV: 2.5 MU/kg/day EOD *3วัน<br>FPV: 1-2.5 MU/kg/day *3-5วัน<br>CDV: 2.0 MU/kg/day EOD *3วัน<br>FIV/FeLV: 1.0 MU/kg/day *5วัน (วันที่ 14 เจาะเลือดดู หากตอบสนองดี ให้ซ้ำ series ที่ 2 และซ้ำอีกทีวัน 90)`, 'blue');
+                html += cautionBlock(`แนะนำสำหรับสัตว์อายุ >9 สัปดาห์`, 'red');
+            }
+            else if (drug === 'prazosin') {
+                html += tabRowSafe('Prazosin 1 mg', 1, 'BID');
+                html += cautionBlock(`ยานี้คำนวณตามขนาดตัว (mg/animal) ไม่ใช่น้ำหนัก โปรดระวังความดันตก (Hypotension)`);
+            }
+            else if (drug === 'tranexamic_acid') {
+                html += injRow('Transic (50 mg/ml) IM/IV', totalAmount / 50, 'QID-TID');
+                html += tabRowSafe('Tramic 250 mg', 250, 'QID-TID');
+                html += cautionBlock(`Slow IV`);
+                html += cautionBlock(`Caution: ห้ามใช้ในสัตว์ที่มีประวัติลิ่มเลือดอุดตัน`, 'red');
+            }
+            else if (drug === 'yunnan_baiyao') {
+                html += tabRowSafe('Yunan bai yao 250 mg cap', 250, 'TID-BID');
+                html += cautionBlock(`TID-BID for 2 days then 19-27 mg/kg for 1-4 weeks`);
+                html += cautionBlock(`Note: can open the capsule and sprinkle powder on the bleeding site`, 'blue');
+                html += cautionBlock(`Caution: ระวังในสัตว์ที่มีโรคตับ`, 'red');
+            }
+            else if (drug === 'amlodipine') {
+                html += tabRowSafe('Amlopine 5 mg', 5, 'SID');
+                html += cautionBlock(`Systemic hypertension: Dog 0.1-0.25 mg/kg, Cat 0.625-1.25 mg/cat`);
+                html += cautionBlock(`Hypertensive emergency: 0.2-0.4 mg/kg`);
+            }
+            else if (drug === 'clindamycin') {
+                html += injRow('Antirobe aquadrops (25 mg/ml) PO', totalAmount / 25, species === 'cat' ? 'SID' : 'BID');
+                html += cautionBlock(species === 'cat' ? `Max 14 days` : `Max 28 days`);
+            }
+            else if (drug === 'clopidogrel') {
+                html += tabRowSafe('Apolets 75 mg', 75, 'SID');
+                if (species === 'dog') html += cautionBlock(`Loading dose 4-10 mg/kg PO on the first day`);
+                html += cautionBlock(`Caution: ระวังภาวะเลือดออกผิดปกติ`, 'red');
+            }
+            else if (drug === 'molnupiravir') {
+                html += tabRowSafe('Monovir 200 mg cap', 200, 'BID *84 days');
+                html += cautionBlock(`Note: FIP = 12-15 mg/kg, 20 mg/kg in severe cases`, 'blue');
+                html += cautionBlock(`Caution: สำหรับแมวอายุ >3 เดือน`, 'red');
+            }
+            else if (drug === 'famciclovir') {
+                html += tabRowSafe('Floclovir 250 mg', 250, 'BID *3-4 weeks');
+                html += cautionBlock(`Note: for FHV-1`, 'blue');
+            }
+            else if (drug === 'pimobendan') {
+                html += tabRowSafe('Cardisure 5 mg', 5, 'BID ac 1 hr');
+            }
+            else if (drug === 'levetiracetam') {
+                html += tabRowSafe('Keppa 250 mg (immediate-release)', 250, 'TID');
+                html += cautionBlock(`Refractory epilepsy: 20-30 mg/kg TID (อาจเพิ่มถึง 60 mg/kg)<br>Cluster seizure: 30 mg/kg จนกว่าจะไม่มีอาการ 24 ชม.`);
+            }
+            else if (drug === 'diazepam') {
+                html += injRow('Sipam (5 mg/ml) IV', totalAmount / 5, '');
+                html += tabRowSafe('Diazepam 10 mg', 10, '');
+                html += cautionBlock(`Pre-med: 0.1-0.3 mg/kg IV<br>Cluster seizure/Status epilepticus: 0.5-1 mg/kg IV (repeat every 10m up to 3x) หรือ 0.5-2 mg/kg ทางทวารหนัก (up to 3x in 24h)`);
+            }
+            else if (drug === 'atropine') {
+                html += injRow('Atropine sulphate (1 mg/ml) IM/IV', totalAmount / 1, '');
+                html += cautionBlock(`0.04 mg/kg IM หรือ 0.01 mg/kg IV`);
+            }
+            else if (drug === 'furosemide') {
+                html += injRow('Furosemide injection (10 mg/ml) IM/IV', totalAmount / 10, '');
+                html += tabRowSafe('Furosic 40 mg', 40, 'BID');
+                html += cautionBlock(`Pulmonary edema: ฉีดซ้ำทุก 1-2 ชม. (สุนัขห้ามเกิน 8 mg/kg ใน 4 ชม.)`);
+            }
+            else if (drug === 'bromhexine') {
+                html += injRow('Mucola injection (2 mg/ml) SC/IM/IV', totalAmount / 2, '');
+                html += injRow('Bromhexine HCl syrup (0.8 mg/ml) PO', totalAmount / 0.8, 'BID *7-10 วัน');
+                html += tabRowSafe('Bromhexine 8 mg', 8, 'BID *7-10 วัน');
+                html += cautionBlock(`Dose PO: 2 mg/kg BID (7-10 วัน) จากนั้นลดเหลือ 1 mg/kg`);
+                html += cautionBlock(`Dose IM: สุนัข 3-15 mg/ตัว, แมว 3 mg/ตัว (ไม่ได้คำนวณจากน้ำหนัก)`, 'blue');
+            }
+
+            // --- Supplement / Miscellaneous (Step-Based) ---
+            else if (drug === 'prabenguard') {
+                let tabs = species === 'dog' ? (w / 10) : (w / 4);
+                html += tabRowStandard('Prabenguard', tabs, 'ให้ทุก 3-6 เดือน');
+            }
+            else if (drug === 'ferro_b') {
+                let tabs = w <= 15 ? 1 : 2;
+                html += tabRowStandard('Ferro-B', tabs, 'SID');
+                html += cautionBlock(`1 tab สำหรับน้ำหนัก 5-15 kg, 2 tab สำหรับ 15-30 kg`, 'blue');
+            }
+            else if (drug === 'same') {
+                let tabs = w <= 5 ? 1 : (w <= 10 ? 2 : 3);
+                html += tabRowStandard('SAMe 100 mg', tabs, 'SID ac 1 hr');
+                if (w > 15) html += cautionBlock(`น้ำหนัก >15 kg: กรุณาพิจารณาปรับขนาดยาตามความเหมาะสม (สูตรอ้างอิงสูงสุดที่ 15 kg)`, 'red');
+            }
+            else if (drug === 'samylin') {
+                if (w <= 10) {
+                    html += tabRowStandard('Samylin Small (<10 kg)', w < 5 ? 1 : 2, 'SID ac 1 hr', '>1 yr');
+                } else if (w <= 30) {
+                    html += tabRowStandard('Samylin Medium (10-30 kg)', w <= 20 ? 1 : 2, 'SID ac 1 hr', '>1 yr');
+                } else {
+                    html += tabRowStandard('Samylin Large (>30 kg)', w <= 40 ? 2 : 3, 'SID ac 1 hr', '>1 yr');
+                }
+            }
+            else if (drug === 'livo_b' || drug === 'hepaphos') {
+                let tabs = w < 5 ? 0.5 : (w <= 10 ? 1 : (w <= 20 ? 1.5 : 2));
+                let name = drug === 'livo_b' ? 'Livo-B' : 'Hepaphos';
+                let freq = drug === 'hepaphos' ? 'SID ac 1 hr' : 'SID'; // Livo-B SID, Hepaphos SID ac 1 hr
+                html += tabRowStandard(name, tabs, freq);
+            }
+            else if (drug === 'renavast') {
+                let tabs = w < 4.5 ? 1 : 2;
+                html += tabRowStandard('RenAvast 300 mg', tabs, 'SID', 'Cat >1 yr');
+                html += `<div class="flex items-start gap-3 bg-slate-50 p-2 rounded mt-2 border border-transparent"><div class="w-4 h-4 mr-1"></div><div class="flex-1 flex justify-between"><span class="text-sm">💊 RenAvast 1000 mg</span><span class="font-bold text-blue-700 text-sm">โปรดอ่านวิธีใช้ข้างกล่อง <span class="text-xs text-slate-500 font-normal ml-1">Dog</span></span></div></div>`;
+                html += cautionBlock(`Note: IRIS CKD 2-3`, 'blue');
+            }
+            else if (drug === 'cystaid') {
+                html += tabRowStandard('Cystaid', 1, 'BID (3-4 สัปดาห์แรก) จากนั้น SID');
+                html += cautionBlock(`Note: GAG precursor >> weak evidence (FIC/LUTs)`, 'blue');
+            }
+            else if (drug === 'ipakitine') {
+                let g = w / 5;
+                html += addRow('🥄', 'Ipakitine', g.toFixed(2), 'g', 'BID', '', 'Ipakitine', g.toFixed(2), 'g', 'PO', '');
+                html += cautionBlock(`Note: Phosphate binder (*up to 28 days)`, 'blue');
+            }
+            else if (drug === 'methovet') {
+                let tabs = w < 4 ? 1 : 2;
+                html += tabRowStandard('Methovet (DL-methionine)', tabs, 'BID');
+                html += cautionBlock(`Note: Urine acidifier >> Struvite-related`, 'blue');
+                html += cautionBlock(`Caution: Do not use in CKD, Hepatic dz., Renal dz., Metabolic acidosis`, 'red');
+            }
+            else if (drug === 'katimun') {
+                let tabs = w / 5;
+                html += tabRowStandard('Katimun', tabs, 'SID');
+                html += cautionBlock(`Note: L-lysine >> weak evidence`, 'blue');
+            }
+            else if (drug === 'vfls') {
+                let bags = w / 5;
+                let prac = getPracticalFraction(bags);
+                html += addRow('📦', 'VF-LS', prac.text, 'ซอง', 'SID', '', 'VF-LS', prac.text, 'ซอง', 'PO', '');
+                html += cautionBlock(`Note: L-lysine >> weak evidence but SOD, L-Theanine, FOS+MOS >> more evidences support`, 'blue');
+            }
+            else if (drug === 'florgut') {
+                let tabsSmall = w < 5 ? 1 : 2;
+                html += tabRowStandard('Florgut (Small)', tabsSmall, 'SID');
+                let tabsLarge = w < 10 ? 1 : 2;
+                html += tabRowStandard('Florgut (Large)', tabsLarge, 'SID');
+            }
+            else if (drug === 'infervac') {
+                let ml = Math.ceil(w / 10) * 1;
+                html += injRow('Infervac (SC, IM)', ml, 'q48h');
+                html += cautionBlock(`1 mL ต่อ <10 kg`, 'blue');
+            }
+            else if (drug === 'antinol') {
+                html += `<div class="flex items-start gap-3 bg-slate-50 p-2 rounded"><div class="w-4 h-4 mr-1"></div><div class="flex-1 flex justify-between"><span class="text-sm">💊 Antinol</span><span class="font-bold text-blue-700">อ่านวิธีใช้ข้างกล่อง</span></div></div>`;
+                html += cautionBlock(`Note: สำหรับสุนัข/แมวอายุ >6 เดือน`, 'blue');
+            }
+            else if (drug === 'glucose') {
+                html += injRow('Glucose T.P. (50%)', totalAmount, 'Slow IV (over 5 mins)');
+                html += cautionBlock(`เจือจาง 1:2 ถึง 1:4 ใน sterile fluid ก่อนให้ทางหลอดเลือด (IV)`);
+                if (species === 'dog') html += cautionBlock(`สุนัข: สามารถให้ทางกระพุ้งแก้ม (buccal) ได้ที่ dose 1 mL/kg`, 'blue');
+            }
+
+            if (isStepBased) {
+                html += cautionBlock(`Caution: Supplement / Miscellaneous มักเริ่มที่อายุ 6-8 สัปดาห์ขึ้นไป (หลังหย่านมและเริ่มกินอาหารแข็ง)`, 'red');
+            }
+
+            html += `</div></div>`;
+            
+            // --- SUMMARY BOX (HIDDEN BY DEFAULT) ---
+            html += `
+            <div id="summaryBox" class="mt-4 bg-yellow-50 p-4 rounded-xl shadow-sm border border-yellow-200 hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-bold text-yellow-800 text-sm flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        สรุปรายการยา (Summary)
+                    </h3>
+                    <button onclick="copySummary(event)" class="text-xs bg-yellow-200 hover:bg-yellow-400 text-yellow-800 py-1.5 px-3 rounded font-semibold transition shadow-sm">คัดลอก (Copy)</button>
+                </div>
+                <textarea id="summaryText" class="w-full bg-white border border-yellow-300 rounded-md p-3 text-sm text-slate-800 outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition" rows="2"></textarea>
+                <p class="text-[11px] font-medium text-yellow-700 mt-2 flex items-start gap-1">
+                    <svg class="shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    สามารถพิมพ์แก้ไขเพิ่มเติม (เช่น เพิ่ม pm, pc) ในกล่องข้อความก่อนกดคัดลอกได้เลยครับ
+                </p>
+            </div>
+            `;
+
+            const resDiv = document.getElementById('results');
+            resDiv.innerHTML = html;
+            resDiv.classList.remove('hidden');
+            // updateSummary called internally by checkboxes
+        }
+
+
+        /* ========================================================
+           FLUID THERAPY CALCULATOR LOGIC
+        ======================================================== */
+        function toggleComorbidState() {
+            const isComorbid = document.getElementById('fluidComorbidGlobal').checked;
+            const container = document.getElementById('comorbidRateContainer');
+            const speciesSelect = document.getElementById('fluidSpecies');
+            if (isComorbid) {
+                container.classList.remove('hidden');
+                speciesSelect.disabled = true;
+                speciesSelect.classList.add('opacity-50', 'bg-slate-100');
+            } else {
+                container.classList.add('hidden');
+                speciesSelect.disabled = false;
+                speciesSelect.classList.remove('opacity-50', 'bg-slate-100');
+            }
+        }
+
+        function calculateFluid() {
+            const errDiv = document.getElementById('fluid-error-msg');
+            const resDiv = document.getElementById('fluid-results');
+            errDiv.classList.add('hidden');
+            resDiv.classList.add('hidden');
+
+            const w = parseFloat(document.getElementById('fluidWeight').value);
+            const isComorbid = document.getElementById('fluidComorbidGlobal').checked;
+            const customRateHr = parseFloat(document.getElementById('fluidCustomRate').value);
+            const maintRate = parseFloat(document.getElementById('fluidSpecies').value) || 60;
+            const dehyd = parseFloat(document.getElementById('fluidDehydration').value) || 0;
+            const ongoing = parseFloat(document.getElementById('fluidOngoing').value) || 0;
+            const dropSet = parseFloat(document.getElementById('fluidDropSet').value);
+            
+            const shockSpecies = document.getElementById('fluidShockSpecies').value;
+
+            if (isNaN(w) || w <= 0) {
+                document.getElementById('fluid-error-text').textContent = "กรุณาระบุน้ำหนักสัตว์ให้ถูกต้อง (ตัวเลขมากกว่า 0 kg)";
+                errDiv.classList.remove('hidden');
+                return;
+            }
+
+            // 1. Maintenance Calculation
+            let maintenanceVol = 0;
+            let maintText = "";
+            if (isComorbid) {
+                if (isNaN(customRateHr) || customRateHr <= 0) {
+                    document.getElementById('fluid-error-text').textContent = "กรุณาระบุ Maintenance Rate (mL/kg/hr) ให้ถูกต้อง";
+                    errDiv.classList.remove('hidden');
+                    return;
+                }
+                maintenanceVol = w * customRateHr * 24;
+                maintText = `${customRateHr} mL/kg/hr`;
+            } else {
+                maintenanceVol = w * maintRate;
+                maintText = `${maintRate} mL/kg/day`;
+            }
+
+            // 2. Deficit Calculation: %Dehydration * Weight(kg) * 10 
+            // (e.g. 5% * 10kg * 10 = 500 ml)
+            let deficitVol = dehyd * w * 10;
+
+            // 3. Total Daily Volume
+            let totalDailyVol = maintenanceVol + deficitVol + ongoing;
+
+            // 4. Rate Calculation (ml/hr)
+            let rateHr = totalDailyVol / 24;
+
+            // 5. Drops Calculation
+            // Drops/min = (Rate ml/hr * drop factor) / 60
+            let dropsMin = (rateHr * dropSet) / 60;
+            let dropsSec = dropsMin / 60;
+            
+            // Format 1 drop every X seconds
+            let dropInterval = dropsSec > 0 ? (1 / dropsSec) : 0;
+            let dropsPer10Sec = dropsSec * 10;
+
+            // 6. Shock Dose Calculation
+            let baseShockMin = shockSpecies === 'dog' ? 15 : 5;
+            let baseShockMax = shockSpecies === 'dog' ? 20 : 10;
+
+            if (isComorbid) {
+                baseShockMin /= 2;
+                baseShockMax /= 2;
+            }
+
+            let shockVolMin = w * baseShockMin;
+            let shockVolMax = w * baseShockMax;
+
+            // 7. SC Fluid Calculation
+            let scVolMin = w * 20;
+            let scVolMax = w * 30;
+
+            let html = `
+            <div class="bg-teal-50 p-4 rounded-xl border border-teal-100 mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-semibold text-teal-800">ปริมาณน้ำเกลือรวมต่อวัน (Total/Day)</span>
+                    <span class="text-xl font-bold text-teal-700">${Math.round(totalDailyVol)} <span class="text-sm font-normal">mL</span></span>
+                </div>
+                <div class="space-y-1.5 mt-3 pt-3 border-t border-teal-200/60 text-xs">
+                    <div class="flex justify-between text-slate-600"><span>• Maintenance (${maintText})</span> <span>${Math.round(maintenanceVol)} mL</span></div>
+                    <div class="flex justify-between text-slate-600"><span>• Deficit (${dehyd}%)</span> <span>${Math.round(deficitVol)} mL</span></div>
+                    <div class="flex justify-between text-slate-600"><span>• Ongoing Losses</span> <span>${Math.round(ongoing)} mL</span></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-white p-3 rounded-lg border border-slate-200 text-center shadow-sm">
+                    <div class="text-[11px] font-semibold text-slate-500 mb-1 uppercase tracking-wide">Infusion Rate</div>
+                    <div class="text-lg font-bold text-blue-700">${rateHr.toFixed(1)} <span class="text-xs font-normal">mL/hr</span></div>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200 text-center shadow-sm">
+                    <div class="text-[11px] font-semibold text-slate-500 mb-1 uppercase tracking-wide">Drip Rate</div>
+                    <div class="text-lg font-bold text-blue-700">${Math.round(dropsMin)} <span class="text-xs font-normal">drops/min</span></div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 text-blue-800 p-3 rounded-lg border border-blue-100 text-center text-sm space-y-1.5 mb-6">
+                <div>💡 ปรับสายน้ำเกลือให้หยด <b>1 หยด ทุกๆ ${dropInterval.toFixed(1)} วินาที</b></div>
+                <div class="text-indigo-700 font-medium">👉 หรือ <b>${dropsPer10Sec.toFixed(1)} หยด ทุกๆ 10 วินาที</b></div>
+            </div>
+
+            <!-- Shock Dose Result -->
+            <div class="bg-rose-50 p-4 rounded-xl border border-rose-200 mb-4">
+                <div class="flex items-center gap-2 mb-2 border-b border-rose-200/60 pb-2">
+                    <svg class="text-rose-600" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    <span class="font-bold text-rose-800 text-sm">Shock Dose Bolus</span>
+                </div>
+                <div class="text-center mb-3">
+                    <div class="text-2xl font-black text-rose-700">${shockVolMin.toFixed(0)} - ${shockVolMax.toFixed(0)} <span class="text-sm font-normal">mL</span></div>
+                    <div class="text-xs text-rose-600">(${baseShockMin} - ${baseShockMax} mL/kg)</div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                    <div class="bg-white p-2 rounded border border-rose-100">
+                        <div class="font-semibold text-slate-500 mb-1">Over 15 mins</div>
+                        <div class="font-bold text-rose-700 text-sm">${(shockVolMin/15).toFixed(1)} - ${(shockVolMax/15).toFixed(1)} <span class="text-[10px] font-normal text-slate-500 block mt-0.5">mL/min</span></div>
+                    </div>
+                    <div class="bg-white p-2 rounded border border-rose-100">
+                        <div class="font-semibold text-slate-500 mb-1">Over 30 mins</div>
+                        <div class="font-bold text-rose-700 text-sm">${(shockVolMin/30).toFixed(1)} - ${(shockVolMax/30).toFixed(1)} <span class="text-[10px] font-normal text-slate-500 block mt-0.5">mL/min</span></div>
+                    </div>
+                </div>
+                ${isComorbid ? `<div class="mt-3 text-[11px] font-semibold text-red-700 bg-red-100 p-2.5 rounded flex gap-1.5 leading-tight items-start"><svg class="shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div>ลด Shock Dose ลง 50% เนื่องจากภาวะโรคหัวใจ/ไต ควรประเมินฟังเสียงปอด (Lung sounds) และอัตราการหายใจทุก 10-15 นาที อย่างใกล้ชิด</div></div>` : ''}
+            </div>
+
+            <!-- SC Fluid Result -->
+            <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200">
+                <div class="flex items-center gap-2 mb-2 border-b border-indigo-200/60 pb-2">
+                    <svg class="text-indigo-600" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span class="font-bold text-indigo-800 text-sm">Subcutaneous (SC) Fluid</span>
+                </div>
+                <div class="text-center mb-1">
+                    <div class="text-xl font-black text-indigo-700">${Math.round(scVolMin)} - ${Math.round(scVolMax)} <span class="text-sm font-normal">mL</span></div>
+                    <div class="text-xs text-indigo-600">(20-30 mL/kg)</div>
+                </div>
+                <div class="mt-2 text-[11px] font-semibold text-indigo-700 bg-indigo-100 p-2 rounded text-center">
+                    ⚠ Maximum 10-20 mL/kg per site<br>(${Math.round(w*10)} - ${Math.round(w*20)} mL ต่อจุด)
+                </div>
+            </div>
+            `;
+
+            resDiv.innerHTML = html;
+            resDiv.classList.remove('hidden');
+        }
+
+        window.onload = function() { 
+            updateDoseUI(); 
+            toggleComorbidState(); // Initialize state
+            
+            // เพิ่มฟังก์ชันกด Enter ในช่อง Drug Calc
+            document.getElementById('weight').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') { e.preventDefault(); calculate(); }
+            });
+            document.getElementById('customDose').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') { e.preventDefault(); calculate(); }
+            });
+
+            // เพิ่มฟังก์ชันกด Enter ในช่อง Fluid Calc
+            ['fluidWeight', 'fluidDehydration', 'fluidOngoing', 'fluidCustomRate'].forEach(id => {
+                document.getElementById(id).addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') { e.preventDefault(); calculateFluid(); }
+                });
+            });
+
+            // เลือกระดับ Maintenance อัตโนมัติจากน้ำหนักที่กรอก
+            document.getElementById('fluidWeight').addEventListener('input', function(e) {
+                const w = parseFloat(e.target.value);
+                const speciesSelect = document.getElementById('fluidSpecies');
+                const isComorbid = document.getElementById('fluidComorbidGlobal').checked;
+                
+                // ถ้ายกเลิกโหมดโรคหัวใจ/ไต ถึงจะสลับ auto maintenance ให้
+                if (!isNaN(w) && w > 0 && !isComorbid) {
+                    if (w < 10) speciesSelect.value = "60";
+                    else if (w <= 25) speciesSelect.value = "50";
+                    else speciesSelect.value = "40";
+                }
+            });
+        };
+    </script>
+</body>
+</html>
