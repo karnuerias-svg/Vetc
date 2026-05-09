@@ -27,6 +27,12 @@
                                 dark: '#6A8678',
                                 text: '#556E62'
                             },
+                            red: {
+                                light: '#F9EBEA',
+                                DEFAULT: '#D98A8A',
+                                dark: '#B06C6C',
+                                text: '#8A5353'
+                            },
                             tan: {
                                 light: '#F8EFEA',
                                 DEFAULT: '#CDAA9C',
@@ -51,8 +57,8 @@
         <p class="text-cozy-blue font-semibold tracking-widest uppercase text-sm mt-0.5">Pet Hospital</p>
     </div>
 
-    <!-- Main Dashboard Container: 3 Columns Grid -->
-    <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+    <!-- Main Dashboard Container: 4 Columns Grid on very large screens -->
+    <div class="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-start">
 
         <!-- ========================================== -->
         <!-- COLUMN 1: VET DRUG CALCULATOR (LEFT)       -->
@@ -213,9 +219,8 @@
             </div>
         </div>
 
-
         <!-- ========================================== -->
-        <!-- COLUMN 2: FLUID THERAPY CALCULATOR (MID)   -->
+        <!-- COLUMN 2: FLUID THERAPY CALCULATOR         -->
         <!-- ========================================== -->
         <div class="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <!-- Header -->
@@ -245,7 +250,7 @@
                     </div>
 
                     <!-- COMORBID SECTION -->
-                    <div class="bg-cozy-pink/30 p-3 rounded-xl border border-cozy-pink/50 space-y-3">
+                    <div class="bg-cozy-pink/30 p-3 rounded-xl border border-rose-200 space-y-3">
                         <div class="flex items-start gap-2">
                             <input type="checkbox" id="fluidComorbidGlobal" class="mt-0.5 w-4 h-4 text-rose-500 border-gray-300 rounded focus:ring-rose-500 cursor-pointer" onchange="toggleComorbidState()">
                             <label for="fluidComorbidGlobal" class="text-sm font-bold text-rose-800 cursor-pointer leading-tight">
@@ -253,9 +258,9 @@
                                 <span class="text-[11px] font-semibold text-rose-500/80">*ระบบจะให้ระบุเรท Maintenance เอง และลด Shock Dose 50%</span>
                             </label>
                         </div>
-                        <div id="comorbidRateContainer" class="hidden border-t border-cozy-pink pt-3">
+                        <div id="comorbidRateContainer" class="hidden border-t border-rose-200 pt-3">
                             <label class="block text-sm font-bold text-rose-800 mb-1">Maintenance Rate (mL/kg/hr)</label>
-                            <input type="number" id="fluidCustomRate" step="0.1" value="1.5" class="w-full rounded-lg border-cozy-pink shadow-sm focus:border-rose-400 focus:ring-rose-400 p-2 border outline-none transition font-bold text-rose-700 bg-white">
+                            <input type="number" id="fluidCustomRate" step="0.1" value="1.5" class="w-full rounded-lg border-rose-300 shadow-sm focus:border-rose-400 focus:ring-rose-400 p-2 border outline-none transition font-bold text-rose-700 bg-white">
                             <p class="text-[10px] font-semibold text-rose-600 mt-1">แนะนำ 1-2 mL/kg/hr เป็นจุดเริ่มต้น (ปรับต่ำกว่า 1 ได้)</p>
                         </div>
                     </div>
@@ -317,7 +322,114 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- COLUMN 3: NUTRITIONAL CALCULATOR (RIGHT)   -->
+        <!-- COLUMN 3: BLOOD TRANSFUSION (NEW)          -->
+        <!-- ========================================== -->
+        <div class="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <!-- Header -->
+            <div class="bg-cozy-red p-4 text-center">
+                <h2 class="text-lg font-bold text-white flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                    Blood Transfusion
+                </h2>
+            </div>
+
+            <div class="p-5">
+                <!-- Inputs Form -->
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-bold text-cozy-red-text mb-1">น้ำหนักผู้รับ (kg)</label>
+                            <input type="number" id="bloodWeight" step="0.1" placeholder="เช่น 5.0" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-cozy-red focus:ring-cozy-red p-2.5 border outline-none transition bg-slate-50 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-cozy-red-text mb-1">ชนิดสัตว์</label>
+                            <select id="bloodSpecies" onchange="updateBloodDefaults()" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-cozy-red focus:ring-cozy-red p-2.5 border outline-none transition bg-slate-50 focus:bg-white cursor-pointer">
+                                <option value="dog" selected>🐶 สุนัข (Dog)</option>
+                                <option value="cat">🐱 แมว (Cat)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-cozy-red-light/50 p-4 rounded-xl border border-cozy-red/20 space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-bold text-cozy-red-text mb-1">Recipient PCV (%)</label>
+                                <input type="number" id="bloodRecipientPCV" step="1" placeholder="เช่น 15" class="w-full rounded-lg border-slate-200 shadow-sm focus:border-cozy-red focus:ring-cozy-red p-2.5 border outline-none transition font-bold text-cozy-red-dark bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-cozy-red-text mb-1">Target PCV (%)</label>
+                                <input type="number" id="bloodTargetPCV" step="1" value="25" class="w-full rounded-lg border-slate-200 shadow-sm focus:border-cozy-red focus:ring-cozy-red p-2.5 border outline-none transition font-bold text-cozy-red-dark bg-white">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-bold text-cozy-red-text mb-1">Donor PCV (%)</label>
+                                <input type="number" id="bloodDonorPCV" step="1" value="45" class="w-full rounded-lg border-slate-200 shadow-sm focus:border-cozy-red focus:ring-cozy-red p-2.5 border outline-none transition font-bold text-cozy-red-dark bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-cozy-red-text mb-1">Blood Product</label>
+                                <select id="bloodProduct" onchange="updateBloodDefaults()" class="w-full rounded-lg border-slate-200 shadow-sm focus:border-cozy-red focus:ring-cozy-red p-2.5 border outline-none transition font-bold text-cozy-red-dark bg-white cursor-pointer text-[13px]">
+                                    <option value="FWB" selected>🩸 FWB</option>
+                                    <option value="SWB">🩸 SWB</option>
+                                    <option value="pRBC">🩸 pRBC</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-[10px] font-semibold text-cozy-red-dark mt-1 space-y-1">
+                            <div class="flex items-start gap-1">
+                                <svg class="shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <span><b>Rule of Thumb:</b> FWB/SWB 2 mL/kg | pRBC 1 mL/kg เพิ่ม PCV 1%</span>
+                            </div>
+                            <div class="flex items-start gap-1">
+                                <svg class="shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                <span><b>Gold Standard:</b> Vol = W x K x ((Target - Recipient) / Donor PCV)</span>
+                            </div>
+                            <div class="flex items-start gap-1">
+                                <svg class="shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                <span>SWB: Stored 4°C >8h (up to 21-35d) | pRBC: Stored 4°C (up to 28-35d)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Rate Modifiers -->
+                    <div class="bg-rose-50 p-3 rounded-xl border border-rose-200 space-y-2">
+                        <div class="flex items-start gap-2">
+                            <input type="checkbox" id="bloodCardiac" class="mt-0.5 w-4 h-4 text-rose-600 border-gray-300 rounded focus:ring-rose-500 cursor-pointer" onchange="toggleBloodConditions('cardiac')">
+                            <label for="bloodCardiac" class="text-xs font-bold text-rose-800 cursor-pointer leading-tight">
+                                Cardiac or Renal Risk Patients<br>
+                                <span class="text-[10px] font-medium text-rose-600">ปรับ Maintenance rate ลงเป็น 1-4 mL/kg/hr อัตโนมัติ</span>
+                            </label>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <input type="checkbox" id="bloodShock" class="mt-0.5 w-4 h-4 text-rose-600 border-gray-300 rounded focus:ring-rose-500 cursor-pointer" onchange="toggleBloodConditions('shock')">
+                            <label for="bloodShock" class="text-xs font-bold text-rose-800 cursor-pointer leading-tight">
+                                Maximum Rate (Shock)<br>
+                                <span class="text-[10px] font-medium text-rose-600" id="shockLabelText">ล็อกเรทสูงสุด Up to 20 mL/kg/hr (สุนัข)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="blood-error-msg" class="hidden text-red-700 text-sm font-medium p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2">
+                        <svg class="shrink-0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <span id="blood-error-text"></span>
+                    </div>
+
+                    <button onclick="calculateBlood()" class="w-full bg-cozy-red hover:bg-cozy-red-dark text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                        คำนวณการให้เลือด
+                    </button>
+                </div>
+
+                <!-- Blood Results Section -->
+                <div id="blood-results" class="mt-6 space-y-4 hidden text-sm">
+                    <!-- Result blocks will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- COLUMN 4: NUTRITIONAL CALCULATOR (RIGHT)   -->
         <!-- ========================================== -->
         <div class="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <!-- Header -->
@@ -1121,95 +1233,6 @@
                 html += cautionBlock(`Caution: ออกฤทธิ์ช้า (เน้นป้องกันมากกว่ารักษาอาการเฉียบพลัน)`, 'red');
             }
 
-            // --- Supplement / Miscellaneous (Step-Based) ---
-            else if (drug === 'prabenguard') {
-                let tabs = species === 'dog' ? (w / 10) : (w / 4);
-                html += tabRowStandard('Prabenguard', tabs, 'ให้ทุก 3-6 เดือน');
-            }
-            else if (drug === 'ferro_b') {
-                let tabs = w <= 15 ? 1 : 2;
-                html += tabRowStandard('Ferro-B', tabs, 'SID');
-                html += cautionBlock(`1 tab สำหรับน้ำหนัก 5-15 kg, 2 tab สำหรับ 15-30 kg`, 'blue');
-            }
-            else if (drug === 'same') {
-                let tabs = w <= 5 ? 1 : (w <= 10 ? 2 : 3);
-                html += tabRowStandard('SAMe 100 mg', tabs, 'SID ac 1 hr');
-                if (w > 15) html += cautionBlock(`น้ำหนัก >15 kg: กรุณาพิจารณาปรับขนาดยาตามความเหมาะสม (สูตรอ้างอิงสูงสุดที่ 15 kg)`, 'red');
-            }
-            else if (drug === 'samylin') {
-                if (w <= 10) {
-                    html += tabRowStandard('Samylin Small (<10 kg)', w < 5 ? 1 : 2, 'SID ac 1 hr', '>1 yr');
-                } else if (w <= 30) {
-                    html += tabRowStandard('Samylin Medium (10-30 kg)', w <= 20 ? 1 : 2, 'SID ac 1 hr', '>1 yr');
-                } else {
-                    html += tabRowStandard('Samylin Large (>30 kg)', w <= 40 ? 2 : 3, 'SID ac 1 hr', '>1 yr');
-                }
-            }
-            else if (drug === 'livo_b' || drug === 'hepaphos') {
-                let tabs = w < 5 ? 0.5 : (w <= 10 ? 1 : (w <= 20 ? 1.5 : 2));
-                let name = drug === 'livo_b' ? 'Livo-B' : 'Hepaphos';
-                let freq = drug === 'hepaphos' ? 'SID ac 1 hr' : 'SID'; // Livo-B SID, Hepaphos SID ac 1 hr
-                html += tabRowStandard(name, tabs, freq);
-            }
-            else if (drug === 'renavast') {
-                if (species === 'cat') {
-                    let tabs = w < 4.5 ? 1 : 2;
-                    html += tabRowStandard('RenAvast 300 mg', tabs, 'SID', 'Cat >1 yr');
-                    html += cautionBlock(`Note: IRIS CKD 2-3`, 'blue');
-                } else {
-                    html += addRow('💊', 'RenAvast 1000 mg', 'อ่านข้างกล่อง', 'cap', '', 'Dog', 'RenAvast 1000 mg', 'ตามคำแนะนำ', 'cap', 'PO', '');
-                    html += cautionBlock(`Note: IRIS CKD 2-3`, 'blue');
-                }
-            }
-            else if (drug === 'cystaid') {
-                html += tabRowStandard('Cystaid', 1, 'BID (3-4 สัปดาห์แรก) จากนั้น SID');
-                html += cautionBlock(`Note: GAG precursor >> weak evidence (FIC/LUTs)`, 'blue');
-            }
-            else if (drug === 'ipakitine') {
-                let g = w / 5;
-                html += addRow('🥄', 'Ipakitine', g.toFixed(2), 'g', 'BID', '', 'Ipakitine', g.toFixed(2), 'g', 'PO', '');
-                html += cautionBlock(`Note: Phosphate binder (*up to 28 days)`, 'blue');
-            }
-            else if (drug === 'methovet') {
-                let tabs = w < 4 ? 1 : 2;
-                html += tabRowStandard('Methovet (DL-methionine)', tabs, 'BID');
-                html += cautionBlock(`Note: Urine acidifier >> Struvite-related`, 'blue');
-                html += cautionBlock(`Caution: Do not use in CKD, Hepatic dz., Renal dz., Metabolic acidosis`, 'red');
-            }
-            else if (drug === 'katimun') {
-                let tabs = w / 5;
-                html += tabRowStandard('Katimun', tabs, 'SID');
-                html += cautionBlock(`Note: L-lysine >> weak evidence`, 'blue');
-            }
-            else if (drug === 'vfls') {
-                let bags = w / 5;
-                let prac = getPracticalFraction(bags);
-                html += addRow('📦', 'VF-LS', prac.text, 'ซอง', 'SID', '', 'VF-LS', prac.text, 'ซอง', 'PO', '');
-                html += cautionBlock(`Note: L-lysine >> weak evidence but SOD, L-Theanine, FOS+MOS >> more evidences support`, 'blue');
-            }
-            else if (drug === 'florgut') {
-                if (w < 10) {
-                    let tabsSmall = w < 5 ? 1 : 2;
-                    html += tabRowStandard('Florgut (Small)', tabsSmall, 'SID');
-                } else {
-                    html += tabRowStandard('Florgut (Large)', 2, 'SID');
-                }
-            }
-            else if (drug === 'infervac') {
-                let ml = Math.ceil(w / 10) * 1;
-                html += injRow('Infervac (SC, IM)', ml, 'q48h');
-                html += cautionBlock(`1 mL ต่อ <10 kg`, 'blue');
-            }
-            else if (drug === 'antinol') {
-                html += addRow('💊', 'Antinol', 'ตามข้างกล่อง', 'cap', '', '', 'Antinol', 'ตามคำแนะนำ', 'cap', 'PO', '');
-                html += cautionBlock(`Note: สำหรับสุนัข/แมวอายุ >6 เดือน (อ่านวิธีใช้ข้างกล่อง)`, 'blue');
-            }
-            else if (drug === 'glucose') {
-                html += injRow('Glucose T.P. (50%)', totalAmount, 'Slow IV (over 5 mins)');
-                html += cautionBlock(`เจือจาง 1:2 ถึง 1:4 ใน sterile fluid ก่อนให้ทางหลอดเลือด (IV)`);
-                if (species === 'dog') html += cautionBlock(`สุนัข: สามารถให้ทางกระพุ้งแก้ม (buccal) ได้ที่ dose 1 mL/kg`, 'blue');
-            }
-
             if (isStepBased && !['antinol', 'oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'].includes(drug)) {
                 html += cautionBlock(`Caution: Supplement / Miscellaneous มักเริ่มที่อายุ 6-8 สัปดาห์ขึ้นไป (หลังหย่านมและเริ่มกินอาหารแข็ง)`, 'red');
             }
@@ -1247,7 +1270,6 @@
                 }
             }, 10);
         }
-
 
         /* ========================================================
            FLUID THERAPY CALCULATOR LOGIC
@@ -1400,6 +1422,175 @@
                 </div>
                 <div class="mt-2 text-[11px] font-semibold text-cozy-blue-dark bg-cozy-blue-light/50 p-2 rounded-lg text-center border border-cozy-blue/20">
                     ⚠ Maximum 10-20 mL/kg per site<br>(${Math.round(w*10)} - ${Math.round(w*20)} mL ต่อจุด)
+                </div>
+            </div>
+            `;
+
+            resDiv.innerHTML = html;
+            resDiv.classList.remove('hidden');
+        }
+
+        /* ========================================================
+           BLOOD TRANSFUSION CALCULATOR LOGIC
+        ======================================================== */
+        function updateBloodDefaults() {
+            const sp = document.getElementById('bloodSpecies').value;
+            const product = document.getElementById('bloodProduct').value;
+            const shockLabel = document.getElementById('shockLabelText');
+            if(shockLabel) {
+                shockLabel.innerText = `ล็อกเรทสูงสุด Up to ${sp === 'dog' ? '20' : '10'} mL/kg/hr (${sp === 'dog' ? 'สุนัข' : 'แมว'})`;
+            }
+            
+            // Auto update Donor PCV
+            const dPCV = document.getElementById('bloodDonorPCV');
+            if (product === 'pRBC') {
+                dPCV.value = 80;
+            } else {
+                dPCV.value = sp === 'dog' ? 45 : 35;
+            }
+        }
+
+        function toggleBloodConditions(type) {
+            if (type === 'cardiac' && document.getElementById('bloodCardiac').checked) {
+                document.getElementById('bloodShock').checked = false;
+            } else if (type === 'shock' && document.getElementById('bloodShock').checked) {
+                document.getElementById('bloodCardiac').checked = false;
+            }
+        }
+
+        function calculateBlood() {
+            const errDiv = document.getElementById('blood-error-msg');
+            const resDiv = document.getElementById('blood-results');
+            errDiv.classList.add('hidden');
+            resDiv.classList.add('hidden');
+
+            const w = parseFloat(document.getElementById('bloodWeight').value);
+            const sp = document.getElementById('bloodSpecies').value;
+            const rPCV = parseFloat(document.getElementById('bloodRecipientPCV').value);
+            const tPCV = parseFloat(document.getElementById('bloodTargetPCV').value);
+            const dPCV = parseFloat(document.getElementById('bloodDonorPCV').value);
+            const product = document.getElementById('bloodProduct').value;
+            const isCardiac = document.getElementById('bloodCardiac').checked;
+            const isShock = document.getElementById('bloodShock').checked;
+
+            if (isNaN(w) || w <= 0) {
+                document.getElementById('blood-error-text').textContent = "กรุณาระบุน้ำหนักผู้รับเลือด";
+                errDiv.classList.remove('hidden'); return;
+            }
+            if (isNaN(rPCV) || isNaN(tPCV) || isNaN(dPCV) || rPCV <= 0 || dPCV <= 0) {
+                document.getElementById('blood-error-text').textContent = "กรุณาระบุค่า PCV ให้ครบและถูกต้อง";
+                errDiv.classList.remove('hidden'); return;
+            }
+            if (rPCV >= tPCV) {
+                document.getElementById('blood-error-text').textContent = "Target PCV ต้องมากกว่า Recipient PCV";
+                errDiv.classList.remove('hidden'); return;
+            }
+
+            // Target Volume Formula (Rule of Thumb) W * Factor * (Target PCV - Recipient PCV)
+            const factor = product === 'pRBC' ? 1 : 2;
+            const targetBloodVol = w * factor * (tPCV - rPCV);
+
+            // Gold Standard Formula
+            const K = sp === 'dog' ? 90 : 66; // Total Blood Volume factor
+            const goldStdVol = w * K * ((tPCV - rPCV) / dPCV);
+
+            // Anticoagulant (CPDA-1) is typically 1 mL per 7 mL of blood
+            const cpdaVol = targetBloodVol / 7;
+            const totalCollectVol = targetBloodVol + cpdaVol;
+
+            // Transfusion Rates (mL/hr)
+            // First 15-30 mins: 0.25 - 1.0 mL/kg/hr
+            const slowRateMin = w * 0.25;
+            const slowRateMax = w * 1.0;
+            
+            // Normal rate
+            let normalRateMin, normalRateMax, normalRateNote, normalRateHtml;
+            
+            if (isCardiac) {
+                normalRateMin = w * 1;
+                normalRateMax = w * 4;
+                normalRateNote = "Cardiac or Renal Risk (1 - 4 mL/kg/hr)";
+                normalRateHtml = `<div class="font-black text-cozy-red-dark">${normalRateMin.toFixed(1)} - ${normalRateMax.toFixed(1)}</div>`;
+            } else if (isShock) {
+                normalRateMax = sp === 'dog' ? w * 20 : w * 10;
+                normalRateMin = normalRateMax;
+                normalRateNote = `Maximum Rate / Shock (Up to ${sp === 'dog' ? 20 : 10} mL/kg/hr)`;
+                normalRateHtml = `<div class="font-black text-cozy-red-dark text-xl">Up to ${normalRateMax.toFixed(0)}</div>`;
+            } else {
+                if (sp === 'cat') {
+                    normalRateMin = w * 5;
+                    normalRateMax = w * 10;
+                    normalRateNote = "Standard Maintenance (5 - 10 mL/kg/hr)";
+                } else {
+                    normalRateMin = w * 10;
+                    normalRateMax = w * 20;
+                    normalRateNote = "Standard Maintenance (10 - 20 mL/kg/hr)";
+                }
+                normalRateHtml = `<div class="font-black text-cozy-red-dark">${normalRateMin.toFixed(0)} - ${normalRateMax.toFixed(0)}</div>`;
+            }
+
+            let collectionHtml = '';
+            if (product !== 'pRBC') {
+                collectionHtml = `
+                <div class="bg-white p-3 rounded-lg border border-cozy-red/30">
+                    <div class="text-xs font-bold text-slate-500 mb-2">การเก็บเลือด (Blood Collection)</div>
+                    <div class="flex justify-between items-center text-xs font-semibold mb-1">
+                        <span>น้ำยากันเลือดแข็ง (CPDA-1):</span>
+                        <span class="font-bold text-cozy-red-dark">${Math.ceil(cpdaVol)} mL</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-semibold">
+                        <span>ปริมาณที่ดูดรวมทั้งหมด:</span>
+                        <span class="font-bold text-cozy-red-dark">${Math.ceil(totalCollectVol)} mL</span>
+                    </div>
+                </div>`;
+            }
+
+            let html = `
+            <div class="bg-cozy-red-light/80 p-4 rounded-xl border border-cozy-red/20 mb-4">
+                <div class="text-center border-b border-cozy-red/20 pb-3 mb-3">
+                    <div class="text-[11px] font-bold text-cozy-red-dark uppercase tracking-wider mb-1">ปริมาณเลือดที่ต้องใช้ (Blood Volume)</div>
+                    <div class="text-3xl font-black text-cozy-red">${Math.round(targetBloodVol)} <span class="text-base font-bold">mL</span></div>
+                    <div class="text-[10px] font-semibold text-cozy-red-dark/80 mt-1">สูตร Rule of Thumb (${product} = ${factor} mL/kg เพิ่ม PCV 1%)</div>
+                    <div class="text-[11px] font-bold text-rose-700 bg-white/60 inline-block px-3 py-1 rounded-full mt-2 border border-rose-200/50">
+                        📌 เทียบกับสูตร Gold Std: ~${Math.round(goldStdVol)} mL
+                    </div>
+                </div>
+                ${collectionHtml}
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div class="flex items-center gap-2 mb-3 border-b border-slate-200 pb-2">
+                    <svg class="text-cozy-red" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m17 7-5-5-5 5"/><path d="m17 17-5 5-5-5"/></svg>
+                    <span class="font-bold text-slate-700 text-sm">Transfusion Rate (mL/hr)</span>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="bg-white p-3 rounded-lg shadow-sm border border-slate-100 flex justify-between items-center">
+                        <div>
+                            <div class="text-sm font-bold text-slate-700">Initial Rate (15-30 นาทีแรก)</div>
+                            <div class="text-[10px] font-semibold text-slate-400">0.25 - 1.0 mL/kg/hr (สังเกตอาการแพ้)</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-black text-cozy-red-dark">${slowRateMin.toFixed(1)} - ${slowRateMax.toFixed(1)}</div>
+                            <div class="text-[10px] font-bold text-slate-400">mL/hr</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-3 rounded-lg shadow-sm border ${isCardiac ? 'border-rose-300 bg-rose-50' : (isShock ? 'border-red-400 bg-red-50' : 'border-slate-100')} flex justify-between items-center">
+                        <div>
+                            <div class="text-sm font-bold text-slate-700">Maintenance Rate</div>
+                            <div class="text-[10px] font-semibold ${isCardiac || isShock ? 'text-rose-500' : 'text-slate-400'}">${normalRateNote}</div>
+                        </div>
+                        <div class="text-right">
+                            ${normalRateHtml}
+                            <div class="text-[10px] font-bold text-slate-400">mL/hr</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 text-[10px] font-semibold text-rose-700 bg-rose-50 p-2.5 rounded-lg flex gap-1.5 leading-tight items-start border border-rose-100">
+                    <svg class="shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <div>กรณีโรคหัวใจล้มเหลว (Heart failure) ควรให้เลือดทั้งหมดให้เสร็จภายใน 4 ชั่วโมงเพื่อป้องกันแบคทีเรียเจริญเติบโต หากให้ไม่ทันอาจต้องแบ่งเลือดเป็น 2 ถุง</div>
                 </div>
             </div>
             `;
@@ -1595,7 +1786,8 @@
 
         window.onload = function() { 
             updateDoseUI(); 
-            toggleComorbidState(); // Initialize state
+            toggleComorbidState(); // Initialize fluid state
+            updateBloodDefaults(); // Initialize blood state
             updateNutriFactors(); // Initialize nutritional factors
             
             // เพิ่มฟังก์ชันกด Enter ในช่อง Drug Calc
@@ -1623,6 +1815,16 @@
                     if (w < 10) speciesSelect.value = "60";
                     else if (w <= 25) speciesSelect.value = "50";
                     else speciesSelect.value = "40";
+                }
+            });
+
+            // เพิ่มฟังก์ชันกด Enter ในช่อง Blood Calc
+            ['bloodWeight', 'bloodRecipientPCV', 'bloodTargetPCV', 'bloodDonorPCV'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') { e.preventDefault(); calculateBlood(); }
+                    });
                 }
             });
 
