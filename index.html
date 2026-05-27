@@ -129,6 +129,7 @@
                                 <option value="clindamycin">Clindamycin (Antirobe)</option>
                                 <option value="doxycycline">Doxycycline (Xanda)</option>
                                 <option value="enrofloxacin">Enrofloxacin</option>
+                                <option value="fenbendazole">Fenbendazole</option>
                                 <option value="itraconazole">Itraconazole</option>
                                 <option value="marbofloxacin">Marbofloxacin</option>
                                 <option value="metronidazole">Metronidazole</option>
@@ -150,6 +151,7 @@
                             </optgroup>
                             <optgroup label="GI Drugs">
                                 <option value="cisapride">Cisapride</option>
+                                <option value="lactulose">Lactulose</option>
                                 <option value="maropitant">Maropitant (Prevomax)</option>
                                 <option value="metoclopramide">Metoclopramide (Manosil)</option>
                                 <option value="omeprazole">Omeprazole</option>
@@ -179,6 +181,7 @@
                             <optgroup label="Supplement / Miscellaneous">
                                 <option value="antinol">Antinol</option>
                                 <option value="cystaid">Cystaid</option>
+                                <option value="fercobsang">Fercobsang</option>
                                 <option value="ferro_b">Ferro-B</option>
                                 <option value="florgut">Florgut</option>
                                 <option value="glucose">Glucose 50%</option>
@@ -192,6 +195,7 @@
                                 <option value="same">SAMe (100 mg)</option>
                                 <option value="samylin">Samylin</option>
                                 <option value="vfls">VF-LS</option>
+                                <option value="vit_b_complex">Vitamin B complex (Yellow)</option>
                             </optgroup>
                         </select>
 
@@ -629,6 +633,13 @@
                     case 'bromhexine': defaultDose = 2; hintText = "2 mg/kg PO BID (7-10 วัน) จากนั้นลดเหลือ 1 mg/kg"; break;
                     case 'tranexamic_acid': defaultDose = 10; hintText = "10 mg/kg PO, slow IV (QID-TID)"; break;
                     case 'yunnan_baiyao': defaultDose = 27; hintText = "27-55 mg/kg PO (TID-BID)"; break;
+                    case 'fenbendazole': defaultDose = 50; hintText = "50 mg/kg PO SID (3-5 วัน)"; break;
+                    case 'lactulose':
+                        if (species === 'cat') { defaultDose = 2; unit = "mL/ตัว"; hintText = "แมว: 2-3 mL/ตัว (Constipation)"; }
+                        else { defaultDose = 0.5; unit = "mL/kg"; hintText = "สุนัข: 0.25-0.5 mL/kg (Constipation) หรือ 0.1-0.3 mL/kg (HE)"; }
+                        break;
+                    case 'vit_b_complex': defaultDose = 0.1; unit = "mL/kg"; hintText = "1 mL/5-10 kg (หรือ 0.1-0.2 mL/kg) SC/IM/IV SID"; break;
+                    case 'fercobsang': defaultDose = 1; unit = "หยด/kg"; hintText = "1-2 หยด/kg PO SID"; break;
                     case 'amlodipine':
                         if (species === 'cat') { defaultDose = 0.625; unit = "mg/ตัว"; hintText = "แมว: 0.625-1.25 mg/ตัว"; }
                         else { defaultDose = 0.1; hintText = "สุนัข: 0.1-0.25 mg/kg"; }
@@ -804,26 +815,34 @@
                 if (drug === 'sucralfate') unitType = 'g_animal';
                 else if (drug === 'prazosin' || drug === 'simethicone') unitType = 'mg_animal';
                 else if (species === 'cat' && ['hydroxyzine', 'cetirizine', 'chlorpheniramine', 'cisapride', 'amlodipine', 'clopidogrel'].includes(drug)) unitType = 'mg_animal';
+                else if (species === 'cat' && drug === 'lactulose') unitType = 'ml_animal';
+                else if (['lactulose', 'vit_b_complex', 'glucose'].includes(drug)) unitType = 'ml_kg';
+                else if (drug === 'fercobsang') unitType = 'drops_kg';
                 else if (drug === 'fentanyl') unitType = 'mcg_kg_hr';
                 else if (drug === 'filgrastim') unitType = 'mcg_kg';
                 else if (drug === 'virbagen') unitType = 'mu_kg';
-                else if (drug === 'glucose') unitType = 'ml_kg';
 
-                totalAmount = (unitType === 'mg_kg') ? (w * dose) : dose;
-                if (['fentanyl', 'filgrastim', 'virbagen', 'glucose'].includes(drug)) totalAmount = w * dose;
+                if (unitType.includes('_kg')) {
+                    totalAmount = w * dose;
+                } else {
+                    totalAmount = dose;
+                }
 
                 if (unitType === 'g_animal') displayDose = `${dose} g/ตัว`;
                 else if (unitType === 'mg_animal') displayDose = `${dose} mg/ตัว`;
+                else if (unitType === 'ml_animal') displayDose = `${dose} mL/ตัว`;
                 else if (unitType === 'mcg_kg_hr') displayDose = `${dose} mcg/kg/hr`;
                 else if (unitType === 'mcg_kg') displayDose = `${dose} mcg/kg`;
                 else if (unitType === 'mu_kg') displayDose = `${dose} MU/kg`;
                 else if (unitType === 'ml_kg') displayDose = `${dose} mL/kg`;
+                else if (unitType === 'drops_kg') displayDose = `${dose} หยด/kg`;
                 else displayDose = `${dose} mg/kg`;
 
                 if (unitType === 'g_animal') displayTotal = `${totalAmount.toFixed(2)} g`;
                 else if (['mcg_kg_hr', 'mcg_kg'].includes(unitType)) displayTotal = `${totalAmount.toFixed(2)} mcg`;
                 else if (unitType === 'mu_kg') displayTotal = `${totalAmount.toFixed(2)} MU`;
-                else if (unitType === 'ml_kg') displayTotal = `${totalAmount.toFixed(2)} mL`;
+                else if (['ml_kg', 'ml_animal'].includes(unitType)) displayTotal = `${totalAmount.toFixed(2)} mL`;
+                else if (unitType === 'drops_kg') displayTotal = `${Math.round(totalAmount)} หยด`;
                 else displayTotal = `${totalAmount.toFixed(2)} mg`;
             }
 
@@ -977,6 +996,11 @@
                 html += injRow('Spectrim susp. (48 mg/ml) PO', totalAmount / 48, 'BID');
                 html += tabRowSafe('Co-trimoxazole 480 mg', 480, 'BID');
             }
+            else if (drug === 'fenbendazole') {
+                html += injRow('Fenbendazole susp. (200 mg/ml) PO', totalAmount / 200, 'SID *3-5 วัน');
+                html += cautionBlock(`Indication: Deworming`);
+                html += cautionBlock(`Caution: แนะนำสำหรับสัตว์อายุ >6 สัปดาห์`, 'red');
+            }
             else if (drug === 'metronidazole') {
                 html += injRow('Metronidazole infusion (5 mg/ml) IV', totalAmount / 5, 'SID *7 days');
                 html += injRow('Metrogyl susp. (40 mg/ml) PO', totalAmount / 40, 'SID *7 days');
@@ -1074,6 +1098,11 @@
             else if (drug === 'sucralfate') {
                 html += injRow('Ulcefate (0.2 g/ml) PO', totalAmount / 0.2, 'BID ac 1 hr');
             }
+            else if (drug === 'lactulose') {
+                html += injRow('Lactulose syrup (0.67 g/ml) PO', totalAmount, 'q6-12h', '(ปรับความถี่ตามลักษณะอุจจาระ)');
+                html += cautionBlock(`Indication: Constipation, Hepatic encephalopathy`);
+                html += cautionBlock(`Contraindication: GI obstruction, GI perforation, Dehydration, DM, combine with other laxatives`, 'red');
+            }
             else if (drug === 'simethicone') {
                 html += injRow('Simcomine syrup (10 mg/ml) PO', totalAmount / 10, 'QID-SID');
                 html += injRow('Simcone drops (67 mg/ml) PO', totalAmount / 67, 'QID-SID');
@@ -1104,6 +1133,15 @@
             else if (drug === 'prazosin') {
                 html += tabRowSafe('Prazosin 1 mg', 1, 'BID');
                 html += cautionBlock(`ยานี้คำนวณตามขนาดตัว (mg/animal) ไม่ใช่น้ำหนัก โปรดระวังความดันตก (Hypotension)`);
+            }
+            else if (drug === 'vit_b_complex') {
+                html += injRow('Vitamin B complex (Yellow) SC/IM/IV', totalAmount, 'SID');
+                html += cautionBlock(`Indication: Vitamin B deficiencies, Anorexia, Chronic diarrhea, EPI, Liver diseases, CKD, Dermatological support`);
+            }
+            else if (drug === 'fercobsang') {
+                html += addRow('💧', 'Fercobsang', Math.round(totalAmount), 'หยด', 'SID', '', 'Fercobsang', Math.round(totalAmount), 'drops', 'PO', `${dose} drops/kg`);
+                html += cautionBlock(`Indication: Anemia, Malnutrition, Accelerates physical recovery`);
+                html += cautionBlock(`Contraindication: For small animals only be given orally`, 'red');
             }
             else if (drug === 'tranexamic_acid') {
                 html += injRow('Transic (50 mg/ml) IM/IV', totalAmount / 50, 'QID-TID');
@@ -1174,7 +1212,12 @@
                 html += addRow('👂', 'Oridermyl', '8', 'หยด/ข้าง', 'SID', `ให้ติดต่อกัน ${duration}`, 'Oridermyl', '8', 'drops/ear', 'Topical', '');
                 html += cautionBlock(`Indication: Ear mite (Permethrin), Antifungal esp. Candiasis (Nystatin)`, 'blue');
                 if (species === 'cat' && w < 1.5) html += cautionBlock(`Caution: ห้ามใช้ในแมวที่น้ำหนัก < 1.5 kg!`, 'red');
-                html += cautionBlock(`Note: เก็บในที่อุณหภูมิ < 25°C | อายุการใช้งานหลังเปิดหลอดคือ 28 วัน`, 'blue');
+            }
+            else if (drug === 'otomax') {
+                let drops = w < 14 ? '4' : '8';
+                html += addRow('👂', 'Otomax 7.5g', drops, 'หยด/ข้าง', 'BID', 'ให้ติดต่อกัน 7 วัน', 'Otomax', drops, 'drops/ear', 'Topical', '');
+                html += cautionBlock(`Indication: Broad-spectrum antifungal (Clotrimazole), Antibacterial (Gentamicin)`, 'blue');
+                if (species === 'cat') html += cautionBlock(`Caution: ห้ามใช้ในแมว (Only prescribe for dogs!)`, 'red');
             }
             else if (drug === 'otomax') {
                 let drops = w < 14 ? '4' : '8';
@@ -1231,6 +1274,101 @@
                 html += addRow('👁️', 'Pemirox (Pemirolast 0.1%)', '1', 'หยด/ข้าง', 'BID', '', 'Pemirox', '1', 'drop/eye', 'Topical', '');
                 html += cautionBlock(`Indication: Allergy (Mast cell stabilizer)`, 'blue');
                 html += cautionBlock(`Caution: ออกฤทธิ์ช้า (เน้นป้องกันมากกว่ารักษาอาการเฉียบพลัน)`, 'red');
+            }
+
+            // เพิ่ม Note สำหรับการทิ้งยาตา/ยาหู ทุกตัวอัตโนมัติ
+            const eyeEarDrugs = ['oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'];
+            if (eyeEarDrugs.includes(drug)) {
+                html += cautionBlock(`Note: Discard the bottle exactly 4 weeks (28 days) after first opening it`, 'blue');
+            }
+
+            // --- Supplement / Miscellaneous (Step-Based) ---
+            else if (drug === 'prabenguard') {
+                let tabs = species === 'dog' ? (w / 10) : (w / 4);
+                html += tabRowStandard('Prabenguard', tabs, 'ให้ทุก 3-6 เดือน');
+            }
+            else if (drug === 'ferro_b') {
+                let tabs = w <= 15 ? 1 : 2;
+                html += tabRowStandard('Ferro-B', tabs, 'SID');
+                html += cautionBlock(`1 tab สำหรับน้ำหนัก 5-15 kg, 2 tab สำหรับ 15-30 kg`, 'blue');
+            }
+            else if (drug === 'same') {
+                let tabs = w <= 5 ? 1 : (w <= 10 ? 2 : 3);
+                html += tabRowStandard('SAMe 100 mg', tabs, 'SID ac 1 hr');
+                if (w > 15) html += cautionBlock(`น้ำหนัก >15 kg: กรุณาพิจารณาปรับขนาดยาตามความเหมาะสม (สูตรอ้างอิงสูงสุดที่ 15 kg)`, 'red');
+            }
+            else if (drug === 'samylin') {
+                if (w <= 10) {
+                    html += tabRowStandard('Samylin Small (<10 kg)', w < 5 ? 1 : 2, 'SID ac 1 hr', '>1 yr');
+                } else if (w <= 30) {
+                    html += tabRowStandard('Samylin Medium (10-30 kg)', w <= 20 ? 1 : 2, 'SID ac 1 hr', '>1 yr');
+                } else {
+                    html += tabRowStandard('Samylin Large (>30 kg)', w <= 40 ? 2 : 3, 'SID ac 1 hr', '>1 yr');
+                }
+            }
+            else if (drug === 'livo_b' || drug === 'hepaphos') {
+                let tabs = w < 5 ? 0.5 : (w <= 10 ? 1 : (w <= 20 ? 1.5 : 2));
+                let name = drug === 'livo_b' ? 'Livo-B' : 'Hepaphos';
+                let freq = drug === 'hepaphos' ? 'SID ac 1 hr' : 'SID';
+                html += tabRowStandard(name, tabs, freq);
+            }
+            else if (drug === 'renavast') {
+                if (species === 'cat') {
+                    let tabs = w < 4.5 ? 1 : 2;
+                    html += tabRowStandard('RenAvast 300 mg', tabs, 'SID', 'Cat >1 yr');
+                    html += cautionBlock(`Note: IRIS CKD 2-3`, 'blue');
+                } else {
+                    html += addRow('💊', 'RenAvast 1000 mg', 'อ่านข้างกล่อง', 'cap', '', 'Dog', 'RenAvast 1000 mg', 'ตามคำแนะนำ', 'cap', 'PO', '');
+                    html += cautionBlock(`Note: IRIS CKD 2-3`, 'blue');
+                }
+            }
+            else if (drug === 'cystaid') {
+                html += tabRowStandard('Cystaid', 1, 'BID (3-4 สัปดาห์แรก) จากนั้น SID');
+                html += cautionBlock(`Note: GAG precursor >> weak evidence (FIC/LUTs)`, 'blue');
+            }
+            else if (drug === 'ipakitine') {
+                let g = w / 5;
+                html += addRow('🥄', 'Ipakitine', g.toFixed(2), 'g', 'BID', '', 'Ipakitine', g.toFixed(2), 'g', 'PO', '');
+                html += cautionBlock(`Note: Phosphate binder (*up to 28 days)`, 'blue');
+            }
+            else if (drug === 'methovet') {
+                let tabs = w < 4 ? 1 : 2;
+                html += tabRowStandard('Methovet (DL-methionine)', tabs, 'BID');
+                html += cautionBlock(`Note: Urine acidifier >> Struvite-related`, 'blue');
+                html += cautionBlock(`Caution: Do not use in CKD, Hepatic dz., Renal dz., Metabolic acidosis`, 'red');
+            }
+            else if (drug === 'katimun') {
+                let tabs = w / 5;
+                html += tabRowStandard('Katimun', tabs, 'SID');
+                html += cautionBlock(`Note: L-lysine >> weak evidence`, 'blue');
+            }
+            else if (drug === 'vfls') {
+                let bags = w / 5;
+                let prac = getPracticalFraction(bags);
+                html += addRow('📦', 'VF-LS', prac.text, 'ซอง', 'SID', '', 'VF-LS', prac.text, 'ซอง', 'PO', '');
+                html += cautionBlock(`Note: L-lysine >> weak evidence but SOD, L-Theanine, FOS+MOS >> more evidences support`, 'blue');
+            }
+            else if (drug === 'florgut') {
+                if (w < 10) {
+                    let tabsSmall = w < 5 ? 1 : 2;
+                    html += tabRowStandard('Florgut (Small)', tabsSmall, 'SID');
+                } else {
+                    html += tabRowStandard('Florgut (Large)', 2, 'SID');
+                }
+            }
+            else if (drug === 'infervac') {
+                let ml = Math.ceil(w / 10) * 1;
+                html += injRow('Infervac (SC, IM)', ml, 'q48h');
+                html += cautionBlock(`1 mL ต่อ <10 kg`, 'blue');
+            }
+            else if (drug === 'antinol') {
+                html += addRow('💊', 'Antinol', 'ตามข้างกล่อง', 'cap', '', '', 'Antinol', 'ตามคำแนะนำ', 'cap', 'PO', '');
+                html += cautionBlock(`Note: สำหรับสุนัข/แมวอายุ >6 เดือน (อ่านวิธีใช้ข้างกล่อง)`, 'blue');
+            }
+            else if (drug === 'glucose') {
+                html += injRow('Glucose T.P. (50%)', totalAmount, 'Slow IV (over 5 mins)');
+                html += cautionBlock(`เจือจาง 1:2 ถึง 1:4 ใน sterile fluid ก่อนให้ทางหลอดเลือด (IV)`);
+                if (species === 'dog') html += cautionBlock(`สุนัข: สามารถให้ทางกระพุ้งแก้ม (buccal) ได้ที่ dose 1 mL/kg`, 'blue');
             }
 
             if (isStepBased && !['antinol', 'oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'].includes(drug)) {
