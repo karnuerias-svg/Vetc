@@ -113,6 +113,10 @@
                                 <option value="clopidogrel">Clopidogrel (Apolets)</option>
                                 <option value="furosemide">Furosemide (Furosic)</option>
                                 <option value="pimobendan">Pimobendan (Cardisure)</option>
+                                <option value="spironolactone">Spironolactone</option>
+                            </optgroup>
+                            <optgroup label="Urinary Tract">
+                                <option value="bethanechol">Bethanechol</option>
                                 <option value="prazosin">Prazosin</option>
                             </optgroup>
                             <optgroup label="Hemostatics">
@@ -129,7 +133,6 @@
                                 <option value="clindamycin">Clindamycin (Antirobe)</option>
                                 <option value="doxycycline">Doxycycline (Xanda)</option>
                                 <option value="enrofloxacin">Enrofloxacin</option>
-                                <option value="fenbendazole">Fenbendazole</option>
                                 <option value="itraconazole">Itraconazole</option>
                                 <option value="marbofloxacin">Marbofloxacin</option>
                                 <option value="metronidazole">Metronidazole</option>
@@ -151,8 +154,8 @@
                             </optgroup>
                             <optgroup label="GI Drugs">
                                 <option value="cisapride">Cisapride</option>
-                                <option value="lactulose">Lactulose</option>
-                                <option value="maropitant">Maropitant (Prevomax)</option>
+                                <option value="cyproheptadine">Cyproheptadine</option>
+                                <option value="maropitant">Maropitant (Prevomax Inj)</option>
                                 <option value="metoclopramide">Metoclopramide (Manosil)</option>
                                 <option value="omeprazole">Omeprazole</option>
                                 <option value="ondansetron">Ondansetron</option>
@@ -163,6 +166,13 @@
                                 <option value="filgrastim">Filgrastim (Leuco-Plus)</option>
                                 <option value="infervac">Infervac</option>
                                 <option value="virbagen">Virbagen Omega</option>
+                            </optgroup>
+                            <optgroup label="Dermatology & Pain (mAb)">
+                                <option value="bedinvetmab">Bedinvetmab (Librela)</option>
+                                <option value="cytopoint">Cytopoint (Lokivetmab)</option>
+                                <option value="funginox">Funginox Spray</option>
+                                <option value="malaseb">Malaseb Shampoo</option>
+                                <option value="oclacitinib">Oclacitinib (Apoquel)</option>
                             </optgroup>
                             <optgroup label="Otic / Ophthalmic (ยาหยอดหู/ตา)">
                                 <option value="oridermyl">Oridermyl</option>
@@ -244,11 +254,10 @@
                             <input type="number" id="fluidWeight" step="0.1" placeholder="เช่น 5.0" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-cozy-green focus:ring-cozy-green p-2.5 border outline-none transition bg-slate-50 focus:bg-white">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-cozy-green-text mb-1">ชนิดสัตว์ / ขนาด</label>
+                            <label class="block text-sm font-bold text-cozy-green-text mb-1">ชนิดสัตว์</label>
                             <select id="fluidSpecies" class="w-full rounded-xl border-slate-200 shadow-sm focus:border-cozy-green focus:ring-cozy-green p-2.5 border outline-none transition bg-slate-50 focus:bg-white cursor-pointer">
-                                <option value="60" selected>🐱/🐶 Cat/Small dog (&lt;10 kg)</option>
-                                <option value="50">🐕 Medium dog (10-25 kg)</option>
-                                <option value="40">🦮 Large dog (25+ kg)</option>
+                                <option value="dog">🐶 สุนัข (Dog)</option>
+                                <option value="cat" selected>🐱 แมว (Cat)</option>
                             </select>
                         </div>
                     </div>
@@ -571,7 +580,8 @@
                 'prabenguard', 'ferro_b', 'same', 'samylin', 'livo_b', 'hepaphos', 'renavast', 'cystaid', 
                 'ipakitine', 'methovet', 'katimun', 'vfls', 'florgut', 'infervac', 'antinol',
                 'oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 
-                'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'
+                'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox',
+                'funginox', 'malaseb', 'cytopoint', 'bedinvetmab'
             ].includes(drug);
 
             if (isStepBased) {
@@ -589,6 +599,12 @@
                     case 'terramycin': hintText = "0.5 cm/ข้าง (q6-12h)"; break;
                     case 'optimmune': hintText = "0.5 cm/ข้าง (q12h)"; break;
                     case 'pemirox': hintText = "1 หยด/ข้าง (BID)"; break;
+                    case 'funginox': hintText = "พ่นบริเวณรอยโรค (SID) 2 สัปดาห์"; break;
+                    case 'malaseb': hintText = "อาบน้ำหมักทิ้งไว้ 10 นาที (2 ครั้ง/สัปดาห์)"; break;
+
+                    // Monoclonal Antibodies (mAbs)
+                    case 'cytopoint': hintText = "เลือกขวดยา (Vial) อัตโนมัติตามน้ำหนักสุนัข"; break;
+                    case 'bedinvetmab': hintText = "เลือกขวดยา (Vial) อัตโนมัติตามน้ำหนักสุนัข"; break;
 
                     // Supplements
                     case 'prabenguard': hintText = "สุนัข 1 tab/10kg, แมว 1 tab/4kg (ทุก 3-6 เดือน)"; break;
@@ -712,6 +728,17 @@
                         if (species === 'cat') { defaultDose = 0.5; hintText = "แมว: 0.25-1 mg/ตัว"; }
                         else { defaultDose = 1; hintText = "สุนัข: 0.5-3 mg/ตัว"; }
                         break;
+                    case 'bethanechol':
+                        unit = "mg/ตัว";
+                        if (species === 'cat') { defaultDose = 2.5; hintText = "แมว: 1.25-5 mg/ตัว PO TID"; }
+                        else { defaultDose = 5; hintText = "สุนัข: 2.5-15 mg/ตัว PO TID"; }
+                        break;
+                    case 'spironolactone': defaultDose = 2; hintText = "1-2 mg/kg PO SID-BID"; break;
+                    case 'oclacitinib': defaultDose = 0.5; hintText = "สุนัข: 0.5 mg/kg BID, แมว: 1 mg/kg SID-BID"; break;
+                    case 'cyproheptadine':
+                        if (species === 'cat') { defaultDose = 2; unit = "mg/ตัว"; hintText = "แมว: 2-4 mg/ตัว PO SID-BID"; }
+                        else { defaultDose = 0.2; hintText = "สุนัข: 0.2 mg/kg PO BID"; }
+                        break;
                 }
                 doseInput.value = defaultDose;
                 doseInput.disabled = false;
@@ -789,7 +816,8 @@
                 'prabenguard', 'ferro_b', 'same', 'samylin', 'livo_b', 'hepaphos', 'renavast', 'cystaid', 
                 'ipakitine', 'methovet', 'katimun', 'vfls', 'florgut', 'infervac', 'antinol',
                 'oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 
-                'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'
+                'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox',
+                'funginox', 'malaseb', 'cytopoint', 'bedinvetmab'
             ].includes(drug);
 
             if (isNaN(w) || w <= 0) return showError("กรุณาระบุน้ำหนักสัตว์ให้ถูกต้อง (ตัวเลขมากกว่า 0 kg)");
@@ -807,17 +835,16 @@
                 else if (drug === 'katimun') { displayDose = "1 tab / 5 kg"; displayTotal = `${(w/5).toFixed(2)} tab`; }
                 else if (drug === 'vfls') { displayDose = "1 ซอง / 5 kg"; displayTotal = `${(w/5).toFixed(2)} ซอง`; }
                 else if (drug === 'infervac') { displayDose = "1 mL ต่อ <10 kg"; displayTotal = `${Math.ceil(w/10).toFixed(2)} mL`; }
-                else if (['antinol', 'oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'].includes(drug)) { 
-                    displayDose = "Topical Dose"; 
-                    displayTotal = "หยด/ป้าย ตามอาการ"; 
+                else if (drug === 'antinol') { displayDose = "อ่านข้างกล่อง"; displayTotal = "กำหนดเอง"; }
+                else if (drug === 'cytopoint' || drug === 'bedinvetmab') { displayDose = "Vial Selection"; displayTotal = "คำนวณขวดตามน้ำหนัก"; }
+                else if (['oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox', 'funginox', 'malaseb'].includes(drug)) { 
+                    displayDose = "Topical / Shampoo"; 
+                    displayTotal = "หยด/ป้าย/พ่น/อาบ ตามอาการ"; 
                 }
             } else {
                 if (drug === 'sucralfate') unitType = 'g_animal';
-                else if (drug === 'prazosin' || drug === 'simethicone') unitType = 'mg_animal';
-                else if (species === 'cat' && ['hydroxyzine', 'cetirizine', 'chlorpheniramine', 'cisapride', 'amlodipine', 'clopidogrel'].includes(drug)) unitType = 'mg_animal';
-                else if (species === 'cat' && drug === 'lactulose') unitType = 'ml_animal';
-                else if (['lactulose', 'vit_b_complex', 'glucose'].includes(drug)) unitType = 'ml_kg';
-                else if (drug === 'fercobsang') unitType = 'drops_kg';
+                else if (drug === 'prazosin' || drug === 'simethicone' || drug === 'bethanechol') unitType = 'mg_animal';
+                else if (species === 'cat' && ['hydroxyzine', 'cetirizine', 'chlorpheniramine', 'cisapride', 'amlodipine', 'clopidogrel', 'cyproheptadine'].includes(drug)) unitType = 'mg_animal';
                 else if (drug === 'fentanyl') unitType = 'mcg_kg_hr';
                 else if (drug === 'filgrastim') unitType = 'mcg_kg';
                 else if (drug === 'virbagen') unitType = 'mu_kg';
@@ -895,7 +922,7 @@
                 let actualMgKg = actualGivenMg / w;
                 let displayActual = (unitType === 'mg_kg') ? `${actualMgKg.toFixed(2)} mg/kg` : `${actualGivenMg.toFixed(2)} mg/ตัว`;
                 
-                if (drug === 'prazosin' || drug === 'simethicone' || (species === 'cat' && ['hydroxyzine', 'cetirizine', 'chlorpheniramine', 'cisapride', 'amlodipine', 'clopidogrel'].includes(drug))) displayActual = `${actualGivenMg.toFixed(2)} mg/ตัว`;
+                if (drug === 'prazosin' || drug === 'simethicone' || (species === 'cat' && ['hydroxyzine', 'cetirizine', 'chlorpheniramine', 'cisapride', 'amlodipine', 'clopidogrel', 'cyproheptadine', 'bethanechol'].includes(drug))) displayActual = `${actualGivenMg.toFixed(2)} mg/ตัว`;
                 else if (unitType === 'g_animal') displayActual = `${(actualGivenMg/1000).toFixed(2)} g/ตัว`;
 
                 let doseCheckHtml = '';
@@ -1134,14 +1161,29 @@
                 html += tabRowSafe('Prazosin 1 mg', 1, 'BID');
                 html += cautionBlock(`ยานี้คำนวณตามขนาดตัว (mg/animal) ไม่ใช่น้ำหนัก โปรดระวังความดันตก (Hypotension)`);
             }
-            else if (drug === 'vit_b_complex') {
-                html += injRow('Vitamin B complex (Yellow) SC/IM/IV', totalAmount, 'SID');
-                html += cautionBlock(`Indication: Vitamin B deficiencies, Anorexia, Chronic diarrhea, EPI, Liver diseases, CKD, Dermatological support`);
+            else if (drug === 'bethanechol') {
+                html += tabRowSafe('Urecholine 10 mg', 10, 'TID');
+                html += cautionBlock(`Indication: กระตุ้นการบีบตัวของกระเพาะปัสสาวะ (Bladder atony)`, 'blue');
+                html += cautionBlock(`Contraindication: ห้ามใช้ในเคสที่มีท่อปัสสาวะอุดตัน (Urethral obstruction) เด็ดขาด`, 'red');
             }
-            else if (drug === 'fercobsang') {
-                html += addRow('💧', 'Fercobsang', Math.round(totalAmount), 'หยด', 'SID', '', 'Fercobsang', Math.round(totalAmount), 'drops', 'PO', `${dose} drops/kg`);
-                html += cautionBlock(`Indication: Anemia, Malnutrition, Accelerates physical recovery`);
-                html += cautionBlock(`Contraindication: For small animals only be given orally`, 'red');
+            else if (drug === 'spironolactone') {
+                html += tabRowSafe('Aldactone 25 mg', 25, 'SID-BID');
+                html += cautionBlock(`Indication: Congestive heart failure, Ascites`, 'blue');
+                html += cautionBlock(`Caution: Potassium-sparing diuretic ระวังภาวะ Hyperkalemia และควรติดตามค่าไต`, 'red');
+            }
+            else if (drug === 'oclacitinib') {
+                html += tabRowSafe('Apoquel 3.6 mg', 3.6, species === 'cat' ? 'SID-BID' : 'BID/SID');
+                html += tabRowSafe('Apoquel 5.4 mg', 5.4, species === 'cat' ? 'SID-BID' : 'BID/SID');
+                html += tabRowSafe('Apoquel 16 mg', 16, species === 'cat' ? 'SID-BID' : 'BID/SID');
+                html += cautionBlock(`Indication: Pruritus associated with allergic and atopic dermatitis`, 'blue');
+                if (species === 'dog') html += cautionBlock(`Dog Dose: 0.5 mg/kg PO BID (14 วันแรก) จากนั้นลดเหลือ SID`);
+                else html += cautionBlock(`Cat Dose (FASS): 1 mg/kg PO SID-BID (28 วัน)`);
+                html += cautionBlock(`Contraindication: ห้ามใช้ในสัตว์ < 12 เดือน, มีโรคติดเชื้ออื่นๆ, ตั้งท้อง, ให้นม`, 'red');
+            }
+            else if (drug === 'cyproheptadine') {
+                html += tabRowSafe('Cyproheptadine 4 mg', 4, 'BID');
+                html += cautionBlock(`Indication: Appetite stimulant, Feline asthma`, 'blue');
+                if (species === 'cat') html += cautionBlock(`Caution: อาจพบภาวะ Paradoxical excitement ในแมว`, 'red');
             }
             else if (drug === 'tranexamic_acid') {
                 html += injRow('Transic (50 mg/ml) IM/IV', totalAmount / 50, 'QID-TID');
@@ -1275,11 +1317,72 @@
                 html += cautionBlock(`Indication: Allergy (Mast cell stabilizer)`, 'blue');
                 html += cautionBlock(`Caution: ออกฤทธิ์ช้า (เน้นป้องกันมากกว่ารักษาอาการเฉียบพลัน)`, 'red');
             }
+            else if (drug === 'funginox') {
+                html += addRow('🧴', 'Funginox Spray (Ketoconazole 2%)', 'พ่นรอยโรค', '', 'SID', 'นาน 2 สัปดาห์', 'Funginox Spray', '1', 'bottle', 'Topical', '');
+                html += cautionBlock(`Indication: Malassezia, Microsporum, Trichophyton`, 'blue');
+                html += cautionBlock(`Caution: สำหรับฉีดพ่นภายนอกเท่านั้น ระวังอย่าให้สัตว์เลีย`, 'red');
+            }
+            else if (drug === 'malaseb') {
+                html += addRow('🧴', 'Malaseb Shampoo', 'ตามขนาดตัว', '', '2 ครั้ง/สัปดาห์', '', 'Malaseb Shampoo', '1', 'bottle', 'Topical', '');
+                html += cautionBlock(`Indication: Seborrheic dermatitis (Malassezia, Staphylococcus)`, 'emerald');
+                html += cautionBlock(`Caution: ฟอกแชมพูทิ้งไว้ 10 นาทีก่อนล้างออก ระวังอย่าให้เข้าตา`, 'red');
+            }
+            else if (drug === 'cytopoint') {
+                if (species === 'cat') {
+                    html += cautionBlock(`Contraindication: ห้ามใช้ในแมวเด็ดขาด! (สำหรับสุนัขเท่านั้น)`, 'red');
+                } else {
+                    if (w < 3) {
+                        let vol = w * 0.2;
+                        html += injRow('Cytopoint 10 mg/vial (SC)', vol, 'ทุก 4-8 สัปดาห์', '0.2 mL/kg');
+                        html += cautionBlock(`Indication: Atopic dermatitis`, 'emerald');
+                        html += cautionBlock(`สำหรับสุนัขน้ำหนัก < 3 kg ให้ดูดยา 0.2 mL/kg จากขวด 10 mg`, 'blue');
+                    } else {
+                        let vialMsg = '';
+                        let totalMg = 0;
+                        if (w <= 10) { vialMsg = 'ขวด 10 mg (1 Vial)'; totalMg = 10; }
+                        else if (w <= 20) { vialMsg = 'ขวด 20 mg (1 Vial)'; totalMg = 20; }
+                        else if (w <= 30) { vialMsg = 'ขวด 30 mg (1 Vial)'; totalMg = 30; }
+                        else if (w <= 40) { vialMsg = 'ขวด 40 mg (1 Vial)'; totalMg = 40; }
+                        else if (w <= 50) { vialMsg = 'ขวด 10 mg + ขวด 40 mg'; totalMg = 50; }
+                        else if (w <= 60) { vialMsg = 'ขวด 30 mg (2 Vials)'; totalMg = 60; }
+                        else if (w <= 70) { vialMsg = 'ขวด 30 mg + ขวด 40 mg'; totalMg = 70; }
+                        else if (w <= 80) { vialMsg = 'ขวด 40 mg (2 Vials)'; totalMg = 80; }
+                        else { vialMsg = '>80 kg (แยกคำนวณ)'; totalMg = w * 1; }
+                        
+                        let actualDoseStr = totalMg > 0 ? `${(totalMg / w).toFixed(2)} mg/kg` : '1 mg/kg';
 
-            // เพิ่ม Note สำหรับการทิ้งยาตา/ยาหู ทุกตัวอัตโนมัติ
-            const eyeEarDrugs = ['oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'];
-            if (eyeEarDrugs.includes(drug)) {
-                html += cautionBlock(`Note: Discard the bottle exactly 4 weeks (28 days) after first opening it`, 'blue');
+                        html += addRow('💉', 'Cytopoint (Lokivetmab)', vialMsg, '', 'ทุก 4-8 สัปดาห์', '', 'Cytopoint', vialMsg, '', 'SC', actualDoseStr);
+                        html += cautionBlock(`Indication: Atopic dermatitis`, 'emerald');
+                        html += cautionBlock(`Note: สำหรับสุนัข >40 kg ให้ดูดยาจากขวดที่ต้องใช้ผสมกันในไซริงค์เดียว แล้วพลิกไปมา 3-4 ครั้งก่อนฉีด`, 'blue');
+                    }
+                }
+            }
+            else if (drug === 'bedinvetmab') {
+                if (species === 'cat') {
+                    html += cautionBlock(`Contraindication: Librela ใช้สำหรับสุนัข (แมวควรใช้ Solensia)`, 'red');
+                } else {
+                    if (w < 5) {
+                        let vol = w * 0.1;
+                        html += injRow('Librela 5 mg/vial (SC)', vol, 'ทุก 4 สัปดาห์', '0.1 mL/kg');
+                        html += cautionBlock(`Indication: Osteoarthritis pain in dogs`, 'emerald');
+                        html += cautionBlock(`สำหรับสุนัขน้ำหนัก < 5 kg ให้ดูดยา 0.1 mL/kg จากขวด 5 mg`, 'blue');
+                    } else {
+                        let vialMsg = '';
+                        let totalMg = 0;
+                        if (w <= 10) { vialMsg = 'ขวด 10 mg (1 Vial)'; totalMg = 10; }
+                        else if (w <= 20) { vialMsg = 'ขวด 20 mg (1 Vial)'; totalMg = 20; }
+                        else if (w <= 30) { vialMsg = 'ขวด 30 mg (1 Vial)'; totalMg = 30; }
+                        else if (w <= 40) { vialMsg = 'ขวด 10 mg + ขวด 30 mg'; totalMg = 40; }
+                        else if (w <= 60) { vialMsg = 'ขวด 20 mg + ขวด 30 mg'; totalMg = 50; }
+                        else if (w <= 80) { vialMsg = 'ขวด 30 mg (2 Vials)'; totalMg = 60; }
+                        else { vialMsg = '>80 kg (แยกคำนวณ)'; totalMg = w * 0.5; }
+                        
+                        let actualDoseStr = totalMg > 0 ? `${(totalMg / w).toFixed(2)} mg/kg` : '0.5-1.0 mg/kg';
+
+                        html += addRow('💉', 'Librela (Bedinvetmab)', vialMsg, '', 'ทุก 4 สัปดาห์', '', 'Librela', vialMsg, '', 'SC', actualDoseStr);
+                        html += cautionBlock(`Indication: Osteoarthritis pain in dogs`, 'emerald');
+                    }
+                }
             }
 
             // --- Supplement / Miscellaneous (Step-Based) ---
@@ -1371,7 +1474,13 @@
                 if (species === 'dog') html += cautionBlock(`สุนัข: สามารถให้ทางกระพุ้งแก้ม (buccal) ได้ที่ dose 1 mL/kg`, 'blue');
             }
 
-            if (isStepBased && !['antinol', 'oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'].includes(drug)) {
+            // เพิ่ม Note สำหรับการทิ้งยาตา/ยาหู ทุกตัวอัตโนมัติ
+            const eyeEarDrugs = ['oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox'];
+            if (eyeEarDrugs.includes(drug)) {
+                html += cautionBlock(`Note: Discard the bottle exactly 4 weeks (28 days) after first opening it`, 'blue');
+            }
+
+            if (isStepBased && !['antinol', 'oridermyl', 'otomax', 'alcon_atropine', 'tobrex', 'tobradex', 'genta_oph', 'dex_oph', 'hista_oph', 'terramycin', 'clavit', 'optimmune', 'pemirox', 'funginox', 'malaseb', 'cytopoint', 'bedinvetmab'].includes(drug)) {
                 html += cautionBlock(`Caution: Supplement / Miscellaneous มักเริ่มที่อายุ 6-8 สัปดาห์ขึ้นไป (หลังหย่านมและเริ่มกินอาหารแข็ง)`, 'red');
             }
 
@@ -1436,7 +1545,7 @@
             const w = parseFloat(document.getElementById('fluidWeight').value);
             const isComorbid = document.getElementById('fluidComorbidGlobal').checked;
             const customRateHr = parseFloat(document.getElementById('fluidCustomRate').value);
-            const maintRate = parseFloat(document.getElementById('fluidSpecies').value) || 60;
+            const fluidSpecies = document.getElementById('fluidSpecies').value;
             const dehyd = parseFloat(document.getElementById('fluidDehydration').value) || 0;
             const ongoing = parseFloat(document.getElementById('fluidOngoing').value) || 0;
             const dropSet = parseFloat(document.getElementById('fluidDropSet').value);
@@ -1461,8 +1570,13 @@
                 maintenanceVol = w * customRateHr * 24;
                 maintText = `${customRateHr} mL/kg/hr`;
             } else {
-                maintenanceVol = w * maintRate;
-                maintText = `${maintRate} mL/kg/day`;
+                if (fluidSpecies === 'dog') {
+                    maintenanceVol = 132 * Math.pow(w, 0.75);
+                    maintText = `132 × BW^0.75 (หรือ 2-6 mL/kg/hr)`;
+                } else {
+                    maintenanceVol = 80 * Math.pow(w, 0.75);
+                    maintText = `80 × BW^0.75 (หรือ 2-3 mL/kg/hr)`;
+                }
             }
 
             // 2. Deficit Calculation: %Dehydration * Weight(kg) * 10 
@@ -1752,21 +1866,32 @@
             `;
 
             const dogOptions = `
-                <optgroup label="สุนัข (Dog)">
-                    <option value="1.0">สุนัขลดน้ำหนัก (Weight Loss) - 1.0x</option>
-                    <option value="1.6">สุนัขทำหมันแล้ว (Neutered) - 1.6x</option>
-                    <option value="1.8">สุนัขยังไม่ทำหมัน (Intact) - 1.8x</option>
-                    <option value="2.0">ลูกสุนัข > 4 เดือน (Puppy) - 2.0x</option>
-                    <option value="3.0">ลูกสุนัข < 4 เดือน (Puppy) - 3.0x</option>
+                <optgroup label="สุนัข (Canine Life Stage Factors)">
+                    <option value="1.0">ลดน้ำหนัก (Weight loss) - 1.0x</option>
+                    <option value="1.0">เสี่ยงอ้วน/กิจกรรมน้อย (Inactive/obese prone) - ใช้ 1.0x (ช่วง 1.0-1.2)</option>
+                    <option value="1.4">ทำหมันแล้ว (Neutered adults) - ใช้ 1.4x (ช่วง 1.4-1.6)</option>
+                    <option value="1.6">ยังไม่ทำหมัน (Intact adult) - ใช้ 1.6x (ช่วง 1.6-1.8)</option>
+                    <option value="2.0">ลูกสุนัขโต ≥4 เดือน (Growth ≥4 mo) - 2.0x</option>
+                    <option value="3.0">ลูกสุนัขเด็ก <4 เดือน (Growth <4 mo) - 3.0x</option>
+                    <option value="3.0">ตั้งท้อง 21 วันสุดท้าย (Gestation) - 3.0x</option>
+                    <option value="3.0">ให้นมลูก (Lactation) - ใช้ 3.0x (ช่วง 3.0-6.0)</option>
+                </optgroup>
+                <optgroup label="สุนัขใช้งาน (Working Dogs)">
+                    <option value="1.6">ใช้งานเบา (Work: Light) - ใช้ 1.6x (ช่วง 1.6-2.0)</option>
+                    <option value="2.0">ใช้งานปานกลาง (Work: Moderate) - ใช้ 2.0x (ช่วง 2.0-5.0)</option>
+                    <option value="5.0">ใช้งานหนัก (Work: Heavy) - ใช้ 5.0x (ช่วง 5.0-11.0)</option>
                 </optgroup>
             `;
 
             const catOptions = `
-                <optgroup label="แมว (Cat)">
-                    <option value="0.8">แมวลดน้ำหนัก (Weight Loss) - 0.8x</option>
-                    <option value="1.2">แมวทำหมันแล้ว (Neutered) - 1.2x</option>
-                    <option value="1.4">แมวยังไม่ทำหมัน (Intact) - 1.4x</option>
-                    <option value="2.5">ลูกแมว (Kitten) - 2.5x</option>
+                <optgroup label="แมว (Feline Life Stage Factors)">
+                    <option value="0.8">ลดน้ำหนัก (Weight loss) - 0.8x</option>
+                    <option value="1.0">เสี่ยงอ้วน/กิจกรรมน้อย (Inactive/obese prone) - 1.0x</option>
+                    <option value="1.2">ทำหมันแล้ว (Neutered adults) - ใช้ 1.2x (ช่วง 1.2-1.4)</option>
+                    <option value="1.4">ยังไม่ทำหมัน (Intact adult) - ใช้ 1.4x (ช่วง 1.4-1.6)</option>
+                    <option value="1.6">ตั้งท้อง (Gestation) - ใช้ 1.6x (ช่วง 1.6-2.0)</option>
+                    <option value="2.0">ให้นมลูก (Lactation) - ใช้ 2.0x (ช่วง 2.0-6.0)</option>
+                    <option value="2.5">ลูกแมว (Growth) - 2.5x</option>
                 </optgroup>
             `;
 
@@ -1941,19 +2066,6 @@
                 document.getElementById(id).addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') { e.preventDefault(); calculateFluid(); }
                 });
-            });
-
-            // เลือกระดับ Maintenance อัตโนมัติจากน้ำหนักที่กรอก
-            document.getElementById('fluidWeight').addEventListener('input', function(e) {
-                const w = parseFloat(e.target.value);
-                const speciesSelect = document.getElementById('fluidSpecies');
-                const isComorbid = document.getElementById('fluidComorbidGlobal').checked;
-                
-                if (!isNaN(w) && w > 0 && !isComorbid) {
-                    if (w < 10) speciesSelect.value = "60";
-                    else if (w <= 25) speciesSelect.value = "50";
-                    else speciesSelect.value = "40";
-                }
             });
 
             // เพิ่มฟังก์ชันกด Enter ในช่อง Blood Calc
