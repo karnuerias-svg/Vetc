@@ -2746,12 +2746,6 @@
         }
 
         window.onload = function() { 
-            // Enter key mapping for ABG 6-steps calc
-            ['abg_ph', 'abg_pco2', 'abg_hco3', 'abg_po2', 'abg_fio2', 'abg_na', 'abg_k', 'abg_cl', 'abg_bun', 'abg_glu', 'abg_osm', 'abg_alb', 'abg_phos', 'abg_weight'].forEach(id => {
-                let el = document.getElementById(id);
-                if(el) el.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); calculateABG(); } });
-
-        window.onload = function() { 
             updateDoseUI(); 
             toggleComorbidState(); 
             updateBloodDefaults(); 
@@ -2776,7 +2770,7 @@
                 if(el) el.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); calculateNutri(); } });
             });
 
-            // Enter key for ABG 6-steps calc
+            // Enter key mapping for ABG 6-steps calc
             ['abg_ph', 'abg_pco2', 'abg_hco3', 'abg_po2', 'abg_fio2', 'abg_na', 'abg_k', 'abg_cl', 'abg_bun', 'abg_glu', 'abg_osm', 'abg_alb', 'abg_phos', 'abg_weight'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); calculateABG(); } });
